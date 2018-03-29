@@ -1,0 +1,528 @@
+swagger: '2.0'
+######################################################
+# Prolog
+######################################################
+info:
+  version: "1.0.0"
+  title: "WSO2 Identity Server Identity Provider Management Rest API "
+  description: |
+    This document specifies a **Identity Provider Management RESTfulAPI** for WSO2 **Identity Server** .
+
+    It is written with [swagger 2](http://swagger.io/).
+
+  contact:
+    name: "WSO2"
+    url: "http://wso2.com/products/identity-server/"
+    email: "architecture@wso2.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+######################################################
+# The fixed parts of the URLs of the API
+######################################################
+
+# The schemes supported by the API
+schemes:
+  - https
+
+# The domain of the API.
+# This is configured by the customer during deployment.
+# The given host is just an example.
+# host: apis.is.com
+
+# The base path of the API.
+# Will be prefixed to all paths.
+# if the tenant domain is carbon.super basepath can be /api/identity/idp-mgt/v1.0 like this too.
+
+basePath: /t/{tenant-domain}/api/identity/idp-mgt/v1.0
+
+# The following media types can be passed as input in message bodies of the API.
+# The actual media type must be specified in the Content-Type header field of the request.
+# The default is json, i.e. the Content-Type header is not needed to
+# be set, but supporting it serves extensibility.
+consumes:
+  - application/json
+
+# The following media types may be passed as output in message bodies of the API.
+# The media type(s) consumable by the requester is specified in the Accept header field
+# of the corresponding request.
+# The actual media type returned will be specified in the Content-Type header field
+# of the of the response.
+# The default of the Accept header is json, i.e. there is not needed to
+# set the value, but supporting it serves extensibility.
+produces:
+  - application/json
+paths:
+  # Endpoint used to add Identity Providers
+  "/idps":
+    post:
+      description: |
+         This API is used to store Identity Provider information.
+      x-wso2-request: |
+        curl -k -X POST "https://localhost:9443/api/identity/idp-mgt/v1.0/idps" -H "Authorization: Basic <Base64Encoded[username:password]>" -H "accept: application/json" -H "Content-Type: application/json" -d ""
+      x-wso2-curl: |
+        curl -k -X POST "https://localhost:9443/api/identity/idp-mgt/v1.0/idps" -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "accept: application/json" -H "Content-Type: application/json" -d ""
+      x-wso2-response: |
+      summary: |
+        Adds Identity Provider
+
+      # post parameters:
+      parameters:
+        -
+          name: identityProvider
+          in: body
+          description:  This represents the Identity Provider element that needs to be stored.
+          required: true
+          schema:
+            $ref: '#/definitions/IdentityProvider'
+      responses:
+        201:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/IdentityProvider'
+          headers:
+            Location:
+              type: 'string'
+              description: 'Location of the newly created IDP'
+        400:
+          description: Bad Request
+          schema:
+             $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized
+          schema:
+             $ref: '#/definitions/Error'
+        409:
+          description: Conflict
+          schema:
+             $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - IDP
+
+    get:
+      description: |
+        This API is used to list Identity Providers based on the filtered attributes.
+      x-wso2-request: |
+
+      x-wso2-curl: |
+
+      x-wso2-response: |
+
+      summary: |
+        List Identity Providers.
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/id'
+
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/idps'
+          headers:
+            Location:
+              type: 'string'
+              description: 'Location to retireve the Identity Provicer'
+        400:
+          description: Bad Request
+          schema:
+             $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized
+          schema:
+             $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - IDP
+
+  "/idps/{id}":
+    delete:
+      description: |
+        This API is used to delete an IDP.
+      x-wso2-request: |
+
+      x-wso2-curl: |
+
+      x-wso2-response: |
+        "HTTP/1.1 200 Ok"
+      summary: |
+        Deletes an IDP
+      parameters:
+         - $ref: '#/parameters/id'
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+          schema:
+             $ref: '#/definitions/Error'
+        400:
+          description: Bad Request
+          schema:
+             $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized
+          schema:
+             $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - IDP
+
+    put:
+      description: |
+        This API is used to update an IDP.
+      x-wso2-request: |
+        curl -k -X DELETE "https://localhost:9443/api/identity/idp-mgt/v1.0/idps/<id>" -H "Authorization: Basic <Base64Encoded[username:password]>" -H "accept: application/json"
+      x-wso2-curl: |
+        curl -k -X DELETE "https://localhost:9443/api/identity/idp-mgt/v1.0/idps/facebook" -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "accept: application/json"
+      x-wso2-response: |
+        "HTTP/1.1 200 Ok"
+      summary: |
+        Updates an IDP
+      parameters:
+         - $ref: '#/parameters/id'
+         -
+          name: identityProvider
+          in: body
+          description:  This represents the Identity Provider element that needs to be stored.
+          required: true
+          schema:
+            $ref: '#/definitions/IdentityProvider'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/IdentityProvider'
+        404:
+          description: Not Found
+          schema:
+             $ref: '#/definitions/Error'
+        400:
+          description: Bad Request
+          schema:
+             $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized
+          schema:
+             $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - IDP
+    get:
+      description: |
+        This API is used to retrieve an Identity Provider using the IDP ID.
+      x-wso2-request: |
+        curl -k -X GET "https://localhost:9443/api/identity/idp-mgt/v1.0/idps/receipts/<IDP_ID>" -H "Authorization: Basic <Base64Encoded[username:password]>" -H "accept: application/json"
+      x-wso2-curl: |
+        curl -k -X GET "https://localhost:9443/api/identity/idp-mgt/v1.0/idps/receipts/7a6886ab-b02f-424f-9cd4-adf5e92f0798" -H "Authorization: Basic YWRtaW46YWRtaW4=" -H "accept: application/json"
+      x-wso2-response: |
+
+      summary: |
+        Retrieves an Identity Provider.
+      parameters:
+        - $ref: '#/parameters/id'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/IdentityProvider'
+        400:
+          description: Bad Request
+          schema:
+             $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized
+          schema:
+             $ref: '#/definitions/Error'
+        404:
+          description: Not Found
+          schema:
+             $ref: '#/definitions/Error'
+        500:
+          description: Server Error
+          schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - IDP
+
+definitions:
+#-----------------------------------------------------
+# The Error Response  object
+#-----------------------------------------------------
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      description:
+        type: string
+
+#-----------------------------------------------------
+# The Property  object
+#-----------------------------------------------------
+  Property:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+
+#-----------------------------------------------------
+# The Authenticator Property  object
+#-----------------------------------------------------
+  ConnectorProperty:
+    type: object
+    properties:
+      advanced:
+        type: boolean
+      confidential:
+        type: boolean
+      defaultValue:
+        type: string
+      description:
+        type: string
+      displayName:
+        type: string
+      displayOrder:
+        type: integer
+      name:
+        type: string
+      required:
+        type: boolean
+      type:
+        type: string
+      value:
+        type: string
+
+#-----------------------------------------------------
+# Identity Provider Object
+#-----------------------------------------------------
+  IdentityProvider:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        description: 'A unique ID for an Identity Provider'
+      name:
+        type: string
+      display-name:
+        type: string
+      description:
+        type: string
+      home-realm-identifier:
+        type: string
+      federation-hub:
+        type: boolean
+      authentication:
+        $ref: '#/definitions/Authentication'
+      provisioning:
+        $ref: '#/definitions/Provisioning'
+      claims:
+        $ref: '#/definitions/Claims'
+      roles:
+        $ref: '#/definitions/Roles'
+      keys:
+        $ref: '#/definitions/Keys'
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+
+#-----------------------------------------------------
+# Identity Provider List Response Object
+#-----------------------------------------------------
+  IDPListResponse:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        description: 'A unique ID for an Identity Provider'
+      name:
+        type: string
+      display-name:
+        type: string
+      description:
+        type: string
+
+#-----------------------------------------------------
+# Identity Provider List Response Object
+#-----------------------------------------------------
+  idps:
+    type: array
+    items:
+      $ref: '#/definitions/IDPListResponse'
+
+#-----------------------------------------------------
+# Authentication Object
+#-----------------------------------------------------
+  Authentication:
+    type: object
+    description: 'Authentication related configurations'
+    properties:
+      jit-provisioning:
+        $ref: '#/definitions/JITProvisioning'
+      authenticators:
+        type: array
+        items:
+          $ref: '#/definitions/Authenticator'
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+#-----------------------------------------------------
+# Claim Mapping Object
+#-----------------------------------------------------
+  ClaimMapping:
+    type: object
+    description: 'Claim mapping'
+    properties:
+      local-claim:
+        type: string
+      remote-claim:
+        type: string
+
+#-----------------------------------------------------
+# JIT Provisioning
+#-----------------------------------------------------
+  JITProvisioning:
+    type: object
+    description: 'JIT provisioning related configurations'
+    properties:
+      enable:
+        type: boolean
+      userstore-domain:
+        type: string
+#-----------------------------------------------------
+# Provisioning Object
+#-----------------------------------------------------
+  Provisioning:
+    type: object
+    description: 'Provisioning configurations'
+    properties:
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+      provisioning-connectors:
+        type: array
+        items:
+          $ref: '#/definitions/ProvisioningConnector'
+
+#-----------------------------------------------------
+# Claims Object
+#-----------------------------------------------------
+  Claims:
+    type: object
+    description: 'Claim configurations'
+    properties:
+      claim-mapping:
+        type: array
+        items:
+          $ref: '#/definitions/ClaimMapping'
+      local-dialect :
+        type: boolean
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+#-----------------------------------------------------
+# Keys Object
+#-----------------------------------------------------
+  Keys:
+    type: object
+    description: 'Keys related configurations'
+    properties:
+      idp-certificates:
+        type: array
+        items:
+          type: string
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+#-----------------------------------------------------
+# Roles Object
+#-----------------------------------------------------
+  Roles:
+    type: object
+    description: 'Roles related configurations'
+    properties:
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+#-----------------------------------------------------
+# Provisioning Connector Object
+#-----------------------------------------------------
+  ProvisioningConnector:
+    type: object
+    required:
+      - id
+    properties:
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/ConnectorProperty'
+#-----------------------------------------------------
+# Authenticator Object
+#-----------------------------------------------------
+  Authenticator:
+    type: object
+    required:
+      - authentictorId
+    properties:
+      properties:
+        type: array
+        items:
+          $ref: '#/definitions/ConnectorProperty'
+
+#-----------------------------------------------------
+# Parameters
+#-----------------------------------------------------
+parameters:
+  id:
+    name: id
+    in: path
+    description: The unique identifier of a receipt
+    type: string
+    required: true
+ 
+  limit:
+    name: limit
+    in: query
+    description: Number of search results
+    required: false
+    type: integer
+
+  offset:
+    name: offset
+    in: query
+    description: Start index of the search
+    required: false
+    type: integer
