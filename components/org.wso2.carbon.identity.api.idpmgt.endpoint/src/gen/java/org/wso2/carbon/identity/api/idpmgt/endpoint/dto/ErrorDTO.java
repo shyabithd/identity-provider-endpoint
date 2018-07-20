@@ -14,10 +14,10 @@ import javax.validation.constraints.NotNull;
 public class ErrorDTO  {
   
   
-  
+  @NotNull
   private String code = null;
   
-  
+  @NotNull
   private String message = null;
   
   
@@ -25,8 +25,9 @@ public class ErrorDTO  {
 
   
   /**
+   * error code
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "error code")
   @JsonProperty("code")
   public String getCode() {
     return code;
@@ -37,8 +38,9 @@ public class ErrorDTO  {
 
   
   /**
+   * Error message.
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "Error message.")
   @JsonProperty("message")
   public String getMessage() {
     return message;
@@ -49,8 +51,9 @@ public class ErrorDTO  {
 
   
   /**
+   * A detail description about the error message.\n
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "A detail description about the error message.\n")
   @JsonProperty("description")
   public String getDescription() {
     return description;

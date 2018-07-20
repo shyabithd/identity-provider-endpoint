@@ -28,6 +28,7 @@ import org.wso2.carbon.idp.mgt.IdentityProviderManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.Response;
 
 public class IDPMgtBridgeService {
 
@@ -60,7 +61,6 @@ public class IDPMgtBridgeService {
 
         // TODO : Remove hard corded tenant domain.
         String tenantDomain = "carbon.super";
-        idpID = Utils.decodeIDPId(idpID);
         ExtendedIdentityProvider idpById = getIDPById(idpID);
         if (idpById.getId() == null) {
             throw new IDPMgtBridgeServiceException("403", "Not allowed to delete file based IDP",
@@ -123,14 +123,12 @@ public class IDPMgtBridgeService {
      * @throws IdentityProviderManagementException IdentityProviderManagementException.
      * @throws IDPMgtBridgeServiceException        IDPMgtBridgeServiceException.
      */
-    public List<ExtendedIdentityProvider> getIDPs() throws
-            IdentityProviderManagementException, IDPMgtBridgeServiceException {
+    public List<IdentityProvider> getIDPs() throws
+            IdentityProviderManagementException {
 
         // TODO : remove hard coded tenant domain.
         String tenantDomain = "carbon.super";
-        List<IdentityProvider> idPs = identityProviderManager.getIdPs(tenantDomain);
-
-        return getExtendedIDPList(idPs);
+        return identityProviderManager.getIdPs(tenantDomain);
     }
 
     /**

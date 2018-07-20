@@ -4,15 +4,15 @@
     <context:property-placeholder/>
     <context:annotation-config/>
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-    <property name="environment">
-        <bean class="org.springframework.web.context.support.StandardServletEnvironment" />
-    </property>
+        <property name="environment">
+            <bean class="org.springframework.web.context.support.StandardServletEnvironment" />
+        </property>
     </bean>
 
     <jaxrs:server id="services" address="/">
         <jaxrs:serviceBeans>
             <bean class="org.wso2.carbon.identity.api.idpmgt.endpoint.IdpsApi"/>
-            
+
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>

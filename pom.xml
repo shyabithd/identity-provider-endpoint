@@ -103,11 +103,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>jsr311-api</artifactId>
-                <version>${jaxrx.jsr311.api.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>javax.ws.rs</groupId>-->
+                <!--<artifactId>jsr311-api</artifactId>-->
+                <!--<version>${jaxrx.jsr311.api.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>org.wso2.carbon.identity.framework</groupId>
                 <artifactId>org.wso2.carbon.idp.mgt</artifactId>
-                <version>${identity.framework.version}</version>
+                <version>${carbon.identity.framework.version.range}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -155,7 +155,10 @@
         <jaxrx.jsr311.api.version>1.1.1</jaxrx.jsr311.api.version>
         <swagger.jaxrs.version>1.5.2</swagger.jaxrs.version>
         <maven.war.plugin.version>2.2</maven.war.plugin.version>
-        <identity.framework.version>5.11.156-SNAPSHOT</identity.framework.version>
+
+        <carbon.identity.framework.version>5.12.49</carbon.identity.framework.version>
+        <carbon.identity.framework.version.range>[5.11.0, 6.0.0]</carbon.identity.framework.version.range>
+
         <maven.scr.plugin.version>1.24.0</maven.scr.plugin.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
     </properties>
