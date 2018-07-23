@@ -2,8 +2,11 @@ package org.wso2.carbon.identity.api.idpmgt.endpoint.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimConfigDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.FederatedAuthenticatorConfigDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.IdentityProviderPropertyDTO;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.JustInTimeProvisioningConfigDTO;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.PermissionsAndRoleConfigDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ProvisioningConnectorConfigDTO;
 
 import io.swagger.annotations.*;
@@ -26,15 +29,15 @@ public class IdPDetailDTO  {
   private String certificate = null;
   
   
-  private Object claimConfig = null;
+  private ClaimConfigDTO claimConfig = null;
   
   
-  private Object defaultAuthenticatorConfig = null;
+  private FederatedAuthenticatorConfigDTO defaultAuthenticatorConfig = null;
   
   
-  private Object defaultProvisioningConnectorConfig = null;
+  private ProvisioningConnectorConfigDTO defaultProvisioningConnectorConfig = null;
   
-  
+  @NotNull
   private String displayName = null;
   
   
@@ -43,13 +46,13 @@ public class IdPDetailDTO  {
   
   private List<FederatedAuthenticatorConfigDTO> federatedAuthenticatorConfigs = new ArrayList<FederatedAuthenticatorConfigDTO>();
   
-  
+  @NotNull
   private Boolean federationHub = null;
   
   
   private String homeRealmId = null;
   
-  
+  @NotNull
   private String id = null;
   
   
@@ -62,7 +65,10 @@ public class IdPDetailDTO  {
   private List<IdentityProviderPropertyDTO> idpProperties = new ArrayList<IdentityProviderPropertyDTO>();
   
   
-  private Object justInTimeProvisioningConfig = null;
+  private JustInTimeProvisioningConfigDTO justInTimeProvisioningConfig = null;
+  
+  
+  private PermissionsAndRoleConfigDTO permissionAndRoleConfig = null;
   
   
   private Boolean primary = null;
@@ -101,40 +107,37 @@ public class IdPDetailDTO  {
 
   
   /**
-   * claimConfig
    **/
-  @ApiModelProperty(value = "claimConfig")
+  @ApiModelProperty(value = "")
   @JsonProperty("claimConfig")
-  public Object getClaimConfig() {
+  public ClaimConfigDTO getClaimConfig() {
     return claimConfig;
   }
-  public void setClaimConfig(Object claimConfig) {
+  public void setClaimConfig(ClaimConfigDTO claimConfig) {
     this.claimConfig = claimConfig;
   }
 
   
   /**
-   * federatedAuthenticatorConfig
    **/
-  @ApiModelProperty(value = "federatedAuthenticatorConfig")
+  @ApiModelProperty(value = "")
   @JsonProperty("defaultAuthenticatorConfig")
-  public Object getDefaultAuthenticatorConfig() {
+  public FederatedAuthenticatorConfigDTO getDefaultAuthenticatorConfig() {
     return defaultAuthenticatorConfig;
   }
-  public void setDefaultAuthenticatorConfig(Object defaultAuthenticatorConfig) {
+  public void setDefaultAuthenticatorConfig(FederatedAuthenticatorConfigDTO defaultAuthenticatorConfig) {
     this.defaultAuthenticatorConfig = defaultAuthenticatorConfig;
   }
 
   
   /**
-   * defaultProvisioningConnectorConfig
    **/
-  @ApiModelProperty(value = "defaultProvisioningConnectorConfig")
+  @ApiModelProperty(value = "")
   @JsonProperty("defaultProvisioningConnectorConfig")
-  public Object getDefaultProvisioningConnectorConfig() {
+  public ProvisioningConnectorConfigDTO getDefaultProvisioningConnectorConfig() {
     return defaultProvisioningConnectorConfig;
   }
-  public void setDefaultProvisioningConnectorConfig(Object defaultProvisioningConnectorConfig) {
+  public void setDefaultProvisioningConnectorConfig(ProvisioningConnectorConfigDTO defaultProvisioningConnectorConfig) {
     this.defaultProvisioningConnectorConfig = defaultProvisioningConnectorConfig;
   }
 
@@ -142,7 +145,7 @@ public class IdPDetailDTO  {
   /**
    * displayName
    **/
-  @ApiModelProperty(value = "displayName")
+  @ApiModelProperty(required = true, value = "displayName")
   @JsonProperty("displayName")
   public String getDisplayName() {
     return displayName;
@@ -181,7 +184,7 @@ public class IdPDetailDTO  {
   /**
    * federationHub
    **/
-  @ApiModelProperty(value = "federationHub")
+  @ApiModelProperty(required = true, value = "federationHub")
   @JsonProperty("federationHub")
   public Boolean getFederationHub() {
     return federationHub;
@@ -207,7 +210,7 @@ public class IdPDetailDTO  {
   /**
    * id
    **/
-  @ApiModelProperty(value = "id")
+  @ApiModelProperty(required = true, value = "id")
   @JsonProperty("id")
   public String getId() {
     return id;
@@ -257,15 +260,26 @@ public class IdPDetailDTO  {
 
   
   /**
-   * justInTimeProvisioningConfig
    **/
-  @ApiModelProperty(value = "justInTimeProvisioningConfig")
+  @ApiModelProperty(value = "")
   @JsonProperty("justInTimeProvisioningConfig")
-  public Object getJustInTimeProvisioningConfig() {
+  public JustInTimeProvisioningConfigDTO getJustInTimeProvisioningConfig() {
     return justInTimeProvisioningConfig;
   }
-  public void setJustInTimeProvisioningConfig(Object justInTimeProvisioningConfig) {
+  public void setJustInTimeProvisioningConfig(JustInTimeProvisioningConfigDTO justInTimeProvisioningConfig) {
     this.justInTimeProvisioningConfig = justInTimeProvisioningConfig;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("permissionAndRoleConfig")
+  public PermissionsAndRoleConfigDTO getPermissionAndRoleConfig() {
+    return permissionAndRoleConfig;
+  }
+  public void setPermissionAndRoleConfig(PermissionsAndRoleConfigDTO permissionAndRoleConfig) {
+    this.permissionAndRoleConfig = permissionAndRoleConfig;
   }
 
   
@@ -329,6 +343,7 @@ public class IdPDetailDTO  {
     sb.append("  identityProviderName: ").append(identityProviderName).append("\n");
     sb.append("  idpProperties: ").append(idpProperties).append("\n");
     sb.append("  justInTimeProvisioningConfig: ").append(justInTimeProvisioningConfig).append("\n");
+    sb.append("  permissionAndRoleConfig: ").append(permissionAndRoleConfig).append("\n");
     sb.append("  primary: ").append(primary).append("\n");
     sb.append("  provisioningConnectorConfigs: ").append(provisioningConnectorConfigs).append("\n");
     sb.append("  provisioningRole: ").append(provisioningRole).append("\n");

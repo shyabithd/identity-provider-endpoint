@@ -18,32 +18,31 @@ import javax.validation.constraints.NotNull;
 public class PermissionsAndRoleConfigDTO  {
   
   
+  @NotNull
+  private List<String> idpRoles = new ArrayList<String>();
   
-  private String idpRoles = null;
-  
-  
+  @NotNull
   private List<ApplicationPermissionDTO> permissions = new ArrayList<ApplicationPermissionDTO>();
   
-  
+  @NotNull
   private List<RoleMappingDTO> roleMappings = new ArrayList<RoleMappingDTO>();
 
   
   /**
-   * idpRoles
    **/
-  @ApiModelProperty(value = "idpRoles")
+  @ApiModelProperty(required = true, value = "")
   @JsonProperty("idpRoles")
-  public String getIdpRoles() {
+  public List<String> getIdpRoles() {
     return idpRoles;
   }
-  public void setIdpRoles(String idpRoles) {
+  public void setIdpRoles(List<String> idpRoles) {
     this.idpRoles = idpRoles;
   }
 
   
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   @JsonProperty("permissions")
   public List<ApplicationPermissionDTO> getPermissions() {
     return permissions;
@@ -55,7 +54,7 @@ public class PermissionsAndRoleConfigDTO  {
   
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   @JsonProperty("roleMappings")
   public List<RoleMappingDTO> getRoleMappings() {
     return roleMappings;

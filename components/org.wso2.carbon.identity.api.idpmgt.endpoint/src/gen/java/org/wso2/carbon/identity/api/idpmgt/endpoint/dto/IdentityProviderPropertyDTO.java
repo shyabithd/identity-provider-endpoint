@@ -14,20 +14,20 @@ import javax.validation.constraints.NotNull;
 public class IdentityProviderPropertyDTO  {
   
   
-  
+  @NotNull
   private String displayName = null;
   
-  
+  @NotNull
   private String name = null;
   
-  
+  @NotNull
   private String value = null;
 
   
   /**
    * displayName
    **/
-  @ApiModelProperty(value = "displayName")
+  @ApiModelProperty(required = true, value = "displayName")
   @JsonProperty("displayName")
   public String getDisplayName() {
     return displayName;
@@ -40,7 +40,7 @@ public class IdentityProviderPropertyDTO  {
   /**
    * name
    **/
-  @ApiModelProperty(value = "name")
+  @ApiModelProperty(required = true, value = "name")
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -53,7 +53,7 @@ public class IdentityProviderPropertyDTO  {
   /**
    * value
    **/
-  @ApiModelProperty(value = "value")
+  @ApiModelProperty(required = true, value = "value")
   @JsonProperty("value")
   public String getValue() {
     return value;

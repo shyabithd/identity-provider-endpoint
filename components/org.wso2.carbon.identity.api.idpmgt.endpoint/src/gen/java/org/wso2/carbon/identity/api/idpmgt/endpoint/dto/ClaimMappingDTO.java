@@ -1,5 +1,6 @@
 package org.wso2.carbon.identity.api.idpmgt.endpoint.dto;
 
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimDTO;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.*;
@@ -18,13 +19,13 @@ public class ClaimMappingDTO  {
   private String defaultValue = null;
   
   
-  private Object localClaim = null;
+  private ClaimDTO localClaim = null;
   
   
   private Boolean mandatory = null;
   
   
-  private Object remoteClaim = null;
+  private ClaimDTO remoteClaim = null;
   
   
   private Boolean required = null;
@@ -47,10 +48,10 @@ public class ClaimMappingDTO  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("localClaim")
-  public Object getLocalClaim() {
+  public ClaimDTO getLocalClaim() {
     return localClaim;
   }
-  public void setLocalClaim(Object localClaim) {
+  public void setLocalClaim(ClaimDTO localClaim) {
     this.localClaim = localClaim;
   }
 
@@ -69,14 +70,13 @@ public class ClaimMappingDTO  {
 
   
   /**
-   * remoteClaim
    **/
-  @ApiModelProperty(value = "remoteClaim")
+  @ApiModelProperty(value = "")
   @JsonProperty("remoteClaim")
-  public Object getRemoteClaim() {
+  public ClaimDTO getRemoteClaim() {
     return remoteClaim;
   }
-  public void setRemoteClaim(Object remoteClaim) {
+  public void setRemoteClaim(ClaimDTO remoteClaim) {
     this.remoteClaim = remoteClaim;
   }
 

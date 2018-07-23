@@ -23,18 +23,16 @@ import org.wso2.carbon.identity.base.IdentityException;
 public class IDPMgtBridgeServiceException extends IdentityException {
 
     private String errorCode;
-    private String description;
 
     public IDPMgtBridgeServiceException(String message) {
 
         super(message);
     }
 
-    public IDPMgtBridgeServiceException(String errorCode, String message, String description) {
+    public IDPMgtBridgeServiceException(String errorCode, String message) {
 
         super(errorCode, message);
         this.errorCode = errorCode;
-        this.description = description;
     }
 
     public IDPMgtBridgeServiceException(String message, Throwable cause) {

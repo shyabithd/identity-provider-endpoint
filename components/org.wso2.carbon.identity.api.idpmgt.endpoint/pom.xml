@@ -55,7 +55,7 @@
                             <directory>src/main/webapp</directory>
                         </resource>
                     </webResources>
-                    <warName>api#identity#idp-mgt#v2.0</warName>
+                    <warName>api#identity#idp-mgt#v1.0</warName>
                     <packagingExcludes>WEB-INF/lib/commons*.jar</packagingExcludes>
                     <packagingExcludes>WEB-INF/lib/axiom*.jar</packagingExcludes>
                     <packagingExcludes>WEB-INF/lib/tomcat*.jar</packagingExcludes>

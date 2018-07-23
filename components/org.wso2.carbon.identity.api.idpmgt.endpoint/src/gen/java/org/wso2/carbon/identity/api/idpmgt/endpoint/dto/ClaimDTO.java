@@ -14,17 +14,17 @@ import javax.validation.constraints.NotNull;
 public class ClaimDTO  {
   
   
-  
+  @NotNull
   private Integer claimId = null;
   
-  
+  @NotNull
   private String claimUri = null;
 
   
   /**
    * claimId
    **/
-  @ApiModelProperty(value = "claimId")
+  @ApiModelProperty(required = true, value = "claimId")
   @JsonProperty("claimId")
   public Integer getClaimId() {
     return claimId;
@@ -37,7 +37,7 @@ public class ClaimDTO  {
   /**
    * claimUri
    **/
-  @ApiModelProperty(value = "claimUri")
+  @ApiModelProperty(required = true, value = "claimUri")
   @JsonProperty("claimUri")
   public String getClaimUri() {
     return claimUri;

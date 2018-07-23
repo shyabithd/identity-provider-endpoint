@@ -1,5 +1,6 @@
 package org.wso2.carbon.identity.api.idpmgt.endpoint.dto;
 
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.LocalRoleDTO;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.*;
@@ -15,7 +16,7 @@ public class RoleMappingDTO  {
   
   
   
-  private Object localRole = null;
+  private LocalRoleDTO localRole = null;
   
   
   private String remoteRole = null;
@@ -25,10 +26,10 @@ public class RoleMappingDTO  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("localRole")
-  public Object getLocalRole() {
+  public LocalRoleDTO getLocalRole() {
     return localRole;
   }
-  public void setLocalRole(Object localRole) {
+  public void setLocalRole(LocalRoleDTO localRole) {
     this.localRole = localRole;
   }
 

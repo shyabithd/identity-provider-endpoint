@@ -2,6 +2,7 @@ package org.wso2.carbon.identity.api.idpmgt.endpoint.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimMappingDTO;
 
 import io.swagger.annotations.*;
@@ -24,10 +25,10 @@ public class ClaimConfigDTO  {
   private List<ClaimMappingDTO> claimMappings = new ArrayList<ClaimMappingDTO>();
   
   
-  private Object idpClaims = null;
+  private ClaimDTO idpClaims = null;
   
   
-  private String localClaimDialect = null;
+  private Boolean localClaimDialect = null;
   
   
   private String roleClaimURI = null;
@@ -66,14 +67,13 @@ public class ClaimConfigDTO  {
 
   
   /**
-   * idpClaims
    **/
-  @ApiModelProperty(value = "idpClaims")
+  @ApiModelProperty(value = "")
   @JsonProperty("idpClaims")
-  public Object getIdpClaims() {
+  public ClaimDTO getIdpClaims() {
     return idpClaims;
   }
-  public void setIdpClaims(Object idpClaims) {
+  public void setIdpClaims(ClaimDTO idpClaims) {
     this.idpClaims = idpClaims;
   }
 
@@ -83,10 +83,10 @@ public class ClaimConfigDTO  {
    **/
   @ApiModelProperty(value = "localClaimDialect")
   @JsonProperty("localClaimDialect")
-  public String getLocalClaimDialect() {
+  public Boolean getLocalClaimDialect() {
     return localClaimDialect;
   }
-  public void setLocalClaimDialect(String localClaimDialect) {
+  public void setLocalClaimDialect(Boolean localClaimDialect) {
     this.localClaimDialect = localClaimDialect;
   }
 

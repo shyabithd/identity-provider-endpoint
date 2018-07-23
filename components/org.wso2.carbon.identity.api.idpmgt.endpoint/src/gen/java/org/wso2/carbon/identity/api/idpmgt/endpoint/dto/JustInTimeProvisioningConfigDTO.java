@@ -15,7 +15,7 @@ public class JustInTimeProvisioningConfigDTO  {
   
   
   
-  private String modifyUserNameAllowed = null;
+  private Boolean modifyUserNameAllowed = null;
   
   
   private Boolean passwordProvisioningEnabled = null;
@@ -32,10 +32,10 @@ public class JustInTimeProvisioningConfigDTO  {
    **/
   @ApiModelProperty(value = "modifyUserNameAllowed")
   @JsonProperty("modifyUserNameAllowed")
-  public String getModifyUserNameAllowed() {
+  public Boolean getModifyUserNameAllowed() {
     return modifyUserNameAllowed;
   }
-  public void setModifyUserNameAllowed(String modifyUserNameAllowed) {
+  public void setModifyUserNameAllowed(Boolean modifyUserNameAllowed) {
     this.modifyUserNameAllowed = modifyUserNameAllowed;
   }
 

@@ -14,16 +14,16 @@ import javax.validation.constraints.NotNull;
 public class LocalRoleDTO  {
   
   
-  
+  @NotNull
   private String localRoleName = null;
   
-  
+  @NotNull
   private String userStoreId = null;
 
   
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   @JsonProperty("localRoleName")
   public String getLocalRoleName() {
     return localRoleName;
@@ -35,7 +35,7 @@ public class LocalRoleDTO  {
   
   /**
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   @JsonProperty("userStoreId")
   public String getUserStoreId() {
     return userStoreId;

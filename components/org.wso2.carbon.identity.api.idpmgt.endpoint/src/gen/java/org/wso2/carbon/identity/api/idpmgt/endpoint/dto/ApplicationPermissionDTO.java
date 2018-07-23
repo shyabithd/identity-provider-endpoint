@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull;
 public class ApplicationPermissionDTO  {
   
   
-  
+  @NotNull
   private String value = null;
 
   
   /**
    * value
    **/
-  @ApiModelProperty(value = "value")
+  @ApiModelProperty(required = true, value = "value")
   @JsonProperty("value")
   public String getValue() {
     return value;
