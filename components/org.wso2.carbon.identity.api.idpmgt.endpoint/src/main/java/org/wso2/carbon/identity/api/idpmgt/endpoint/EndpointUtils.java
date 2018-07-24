@@ -40,6 +40,7 @@ import java.util.List;
 
 public class EndpointUtils {
 
+    private EndpointUtils() {}
     /**
      * Translate identityProvider to identityProviderDTO
      * @param identityProvider identity provider that needs to be translated to identity provider DTO
@@ -520,11 +521,11 @@ public class EndpointUtils {
         }
         return claimDTO;
     }
-        /**
-         * Translate Claim Configuration to Claim Configuration DTO
-         * @param claimConfig Claim Configuration  that needs to be translated to Claim Configuration DTO
-         * @return claimConfigDTO
-         */
+    /**
+     * Translate Claim Configuration to Claim Configuration DTO
+     * @param claimConfig Claim Configuration  that needs to be translated to Claim Configuration DTO
+     * @return claimConfigDTO
+     */
     public static ClaimConfigDTO createClaimConfigDTO(ClaimConfig claimConfig) {
 
         ClaimConfigDTO claimConfigDTO = null;

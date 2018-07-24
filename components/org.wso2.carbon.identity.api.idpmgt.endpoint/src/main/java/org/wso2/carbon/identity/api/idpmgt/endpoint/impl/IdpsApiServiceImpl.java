@@ -20,8 +20,6 @@ import org.wso2.carbon.identity.application.common.model.JustInTimeProvisioningC
 import org.wso2.carbon.identity.application.common.model.PermissionsAndRoleConfig;
 import org.wso2.carbon.identity.application.common.model.ProvisioningConnectorConfig;
 import org.wso2.carbon.idp.mgt.IdentityProviderManagementException;
-
-import java.util.Arrays;
 import java.util.List;
 import javax.ws.rs.core.Response;
 
