@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.identity.api.idpmgt;
 
+import javafx.util.Pair;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -137,8 +138,9 @@ public class IDPMgtBridgeService {
         IdentityProvider idp = getIDPById(idpID);
         List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs = Arrays.asList(idp
                 .getFederatedAuthenticatorConfigs());
-        return (List<FederatedAuthenticatorConfig>) paginationList(federatedAuthenticatorConfigs, limit, offset);
-    }
+
+        Pair<Integer, Integer> indexValue = paginationList(federatedAuthenticatorConfigs.size(), limit, offset);
+        return federatedAuthenticatorConfigs.subList(indexValue.getKey(), indexValue.getValue());    }
 
     /**
      * Function returns the set of provision connectors for a given IDP
@@ -156,7 +158,9 @@ public class IDPMgtBridgeService {
         IdentityProvider idp = getIDPById(idpID);
         List<ProvisioningConnectorConfig> provisioningConnectorConfigs = Arrays.asList(idp
                 .getProvisioningConnectorConfigs());
-        return (List<ProvisioningConnectorConfig>) paginationList(provisioningConnectorConfigs, limit, offset);
+
+        Pair<Integer, Integer> indexValue = paginationList(provisioningConnectorConfigs.size(), limit, offset);
+        return provisioningConnectorConfigs.subList(indexValue.getKey(), indexValue.getValue());
     }
 
     /**
@@ -171,10 +175,11 @@ public class IDPMgtBridgeService {
         String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         List<IdentityProvider> identityProviders = identityProviderManager.getIdPs(tenantDomain);
 
-        return (List<IdentityProvider>) paginationList(identityProviders, limit, offset);
+        Pair<Integer, Integer> indexValue = paginationList(identityProviders.size(), limit, offset);
+        return identityProviders.subList(indexValue.getKey(), indexValue.getValue());
     }
 
-    private List<?> paginationList(List<?> listToBePaginated, Integer limit, Integer offset) throws
+    private Pair<Integer, Integer> paginationList(Integer listSize, Integer limit, Integer offset) throws
             IDPMgtBridgeServiceException {
 
         if (limit == null) {
@@ -188,16 +193,17 @@ public class IDPMgtBridgeService {
         validatePaginationParameters(limit, offset);
 
         int endIndex;
-        if (listToBePaginated.size() <= (limit + offset)) {
-            endIndex = listToBePaginated.size();
+        if (listSize <= (limit + offset)) {
+            endIndex = listSize;
         }
         else {
             endIndex = (limit + offset);
         }
-        if (listToBePaginated.size() < offset) {
-            return new ArrayList<>();
+        if (listSize < offset) {
+            endIndex = 0;
+            offset = 0;
         }
-        return listToBePaginated.subList(offset, endIndex);
+        return new Pair<>(offset, endIndex);
     }
     /**
      * Updates an existing IDP.
