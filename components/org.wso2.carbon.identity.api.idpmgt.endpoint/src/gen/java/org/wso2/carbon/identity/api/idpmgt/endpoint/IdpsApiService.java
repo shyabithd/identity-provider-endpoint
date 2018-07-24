@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 
 public abstract class IdpsApiService {
     public abstract Response idpsGet(Integer limit,Integer offset,String spTenantDomain);
-    public abstract Response idpsIdAuthenticatorsGet(String id);
+    public abstract Response idpsIdAuthenticatorsGet(String id,Integer limit,Integer offset);
     public abstract Response idpsIdAuthenticatorsPut(String id,FederatedAuthenticatorConfigDTO body);
     public abstract Response idpsIdClaimsGet(String id);
     public abstract Response idpsIdClaimsPut(String id,ClaimConfigDTO body);
@@ -30,7 +30,7 @@ public abstract class IdpsApiService {
     public abstract Response idpsIdGet(String id);
     public abstract Response idpsIdJitProvisioningGet(String id);
     public abstract Response idpsIdJitProvisioningPut(String id,JustInTimeProvisioningConfigDTO body);
-    public abstract Response idpsIdOutboundConnectorsGet(String id);
+    public abstract Response idpsIdOutboundConnectorsGet(String id,Integer limit,Integer offset);
     public abstract Response idpsIdOutboundConnectorsPut(String id,ProvisioningConnectorConfigDTO body);
     public abstract Response idpsIdPut(String id,IdPDetailDTO body);
     public abstract Response idpsIdRolesGet(String id);

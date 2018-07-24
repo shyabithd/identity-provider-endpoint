@@ -325,6 +325,8 @@ paths:
 
       parameters:
         - $ref: '#/parameters/id'
+        - $ref : '#/parameters/limit'
+        - $ref : '#/parameters/offset'
 
       tags:
         - IdP (Authenticators)
@@ -723,6 +725,8 @@ paths:
 
       parameters:
         - $ref: '#/parameters/id'
+        - $ref : '#/parameters/limit'
+        - $ref : '#/parameters/offset'
       tags:
         - IdP (Outbound Connectors)
       responses:

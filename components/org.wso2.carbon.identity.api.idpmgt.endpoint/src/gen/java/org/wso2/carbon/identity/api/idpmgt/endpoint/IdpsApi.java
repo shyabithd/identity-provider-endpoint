@@ -67,9 +67,11 @@ public class IdpsApi  {
         
         @io.swagger.annotations.ApiResponse(code = 500, message = "Server Error") })
 
-    public Response idpsIdAuthenticatorsGet(@ApiParam(value = "The unique identifier of a receipt",required=true ) @PathParam("id")  String id)
+    public Response idpsIdAuthenticatorsGet(@ApiParam(value = "The unique identifier of a receipt",required=true ) @PathParam("id")  String id,
+    @ApiParam(value = "Maximum size of resource array to return.\n", defaultValue="25") @QueryParam("limit")  Integer limit,
+    @ApiParam(value = "Starting point within the complete list of items qualified.\n", defaultValue="0") @QueryParam("offset")  Integer offset)
     {
-    return delegate.idpsIdAuthenticatorsGet(id);
+    return delegate.idpsIdAuthenticatorsGet(id,limit,offset);
     }
     @PUT
     @Path("/{id}/authenticators/")
@@ -214,9 +216,11 @@ public class IdpsApi  {
         
         @io.swagger.annotations.ApiResponse(code = 500, message = "Server Error") })
 
-    public Response idpsIdOutboundConnectorsGet(@ApiParam(value = "The unique identifier of a receipt",required=true ) @PathParam("id")  String id)
+    public Response idpsIdOutboundConnectorsGet(@ApiParam(value = "The unique identifier of a receipt",required=true ) @PathParam("id")  String id,
+    @ApiParam(value = "Maximum size of resource array to return.\n", defaultValue="25") @QueryParam("limit")  Integer limit,
+    @ApiParam(value = "Starting point within the complete list of items qualified.\n", defaultValue="0") @QueryParam("offset")  Integer offset)
     {
-    return delegate.idpsIdOutboundConnectorsGet(id);
+    return delegate.idpsIdOutboundConnectorsGet(id,limit,offset);
     }
     @PUT
     @Path("/{id}/outbound-connectors/")

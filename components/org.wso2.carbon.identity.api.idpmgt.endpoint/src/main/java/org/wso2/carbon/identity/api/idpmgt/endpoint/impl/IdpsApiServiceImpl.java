@@ -2,7 +2,6 @@ package org.wso2.carbon.identity.api.idpmgt.endpoint.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.identity.api.idpmgt.ExtendedIdentityProvider;
 import org.wso2.carbon.identity.api.idpmgt.IDPMgtBridgeService;
 import org.wso2.carbon.identity.api.idpmgt.IDPMgtBridgeServiceException;
 import org.wso2.carbon.identity.api.idpmgt.Utils;
@@ -21,7 +20,6 @@ import org.wso2.carbon.identity.application.common.model.JustInTimeProvisioningC
 import org.wso2.carbon.identity.application.common.model.PermissionsAndRoleConfig;
 import org.wso2.carbon.identity.application.common.model.ProvisioningConnectorConfig;
 import org.wso2.carbon.idp.mgt.IdentityProviderManagementException;
-import org.wso2.carbon.user.api.UserStoreException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,20 +35,23 @@ public class IdpsApiServiceImpl extends IdpsApiService {
     public Response idpsGet(Integer limit, Integer offset, String spTenantDomain) {
 
         try {
-            List<IdentityProvider> identityProviders = idpMgtBridgeService.getIDPs();
+            List<IdentityProvider> identityProviders = idpMgtBridgeService.getIDPs(limit, offset);
             return Response.ok().entity(EndpointUtils.translateIDPDetailList(identityProviders)).build();
         } catch (IdentityProviderManagementException e) {
             return handleServerErrorResponse(e);
+        } catch (IDPMgtBridgeServiceException e) {
+            return handleBadRequestResponse(e);
         }
     }
 
     @Override
-    public Response idpsIdAuthenticatorsGet(String id) {
+    public Response idpsIdAuthenticatorsGet(String id, Integer limit, Integer offset) {
 
         try {
-            IdentityProvider idp = idpMgtBridgeService.getIDPById(id);
-            return Response.ok().entity(EndpointUtils.createFederatorAuthenticatorDTOList(Arrays.asList(idp
-                    .getFederatedAuthenticatorConfigs()))).build();
+            List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs = idpMgtBridgeService
+                    .getAuthenticatorList(id, limit, offset);
+            return Response.ok().entity(EndpointUtils.createFederatorAuthenticatorDTOList
+                    (federatedAuthenticatorConfigs)).build();
         } catch (IDPMgtBridgeServiceException e) {
             return handleBadRequestResponse(e);
         } catch (IdentityProviderManagementException e) {
@@ -155,12 +156,13 @@ public class IdpsApiServiceImpl extends IdpsApiService {
     }
 
     @Override
-    public Response idpsIdOutboundConnectorsGet(String id) {
+    public Response idpsIdOutboundConnectorsGet(String id, Integer limit, Integer offset) {
 
         try {
-            IdentityProvider idp = idpMgtBridgeService.getIDPById(id);
-            return Response.ok().entity(EndpointUtils.createProvisioningConnectorConfigDTOs(Arrays.asList(idp
-                    .getProvisioningConnectorConfigs()))).build();
+            List<ProvisioningConnectorConfig> provisioningConnectorConfigs = idpMgtBridgeService
+                    .getOutboundConnectorList(id, limit, offset);
+            return Response.ok().entity(EndpointUtils.createProvisioningConnectorConfigDTOs(
+                    provisioningConnectorConfigs)).build();
         } catch (IDPMgtBridgeServiceException e) {
             return handleBadRequestResponse(e);
         } catch (IdentityProviderManagementException e) {

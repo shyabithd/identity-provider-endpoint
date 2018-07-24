@@ -17,7 +17,8 @@ public class Constants {
 
         ERROR_CODE_RESOURCE_NOT_FOUND("IDP_00001", "No existing IDP found with given ID"),
         ERROR_CODE_IDP_ALREADY_EXIST("IDP_00002", "An IDP with given name already exists"),
-        ERROR_CODE_INVALID_IDP("IDP_00001", "Identity Provider name is missing");
+        ERROR_CODE_INVALID_IDP("IDP_00003", "Identity Provider name is missing"),
+        ERROR_CODE_INVALID_ARGS_FOR_LIMIT_OFFSET("IDP_00004", "Identity Provider name is missing");
         private final String code;
         private final String message;
 

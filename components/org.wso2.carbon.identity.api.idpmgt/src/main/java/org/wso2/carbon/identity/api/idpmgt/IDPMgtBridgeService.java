@@ -123,18 +123,82 @@ public class IDPMgtBridgeService {
     }
 
     /**
+     * Function returns the set of authenticators for a given IDP
+     * @param idpID id of the idp
+     * @param limit limit of the query
+     * @param offset starting index of the query
+     * @return list of authenticators which satisfy the query parameters
+     * @throws IdentityProviderManagementException throws
+     * @throws IDPMgtBridgeServiceException throws
+     */
+    public List<FederatedAuthenticatorConfig> getAuthenticatorList(String idpID, Integer limit, Integer offset) throws
+            IdentityProviderManagementException, IDPMgtBridgeServiceException {
+
+        IdentityProvider idp = getIDPById(idpID);
+        List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs = Arrays.asList(idp
+                .getFederatedAuthenticatorConfigs());
+        return (List<FederatedAuthenticatorConfig>) paginationList(federatedAuthenticatorConfigs, limit, offset);
+    }
+
+    /**
+     * Function returns the set of provision connectors for a given IDP
+     * @param idpID id of the idp
+     * @param limit limit of the query
+     * @param offset starting index of the query
+     * @return list of authenticators which satisfy the query parameters
+     * @throws IdentityProviderManagementException throws
+     * @throws IDPMgtBridgeServiceException throws
+     */
+    public List<ProvisioningConnectorConfig> getOutboundConnectorList(String idpID, Integer limit, Integer offset)
+            throws
+            IdentityProviderManagementException, IDPMgtBridgeServiceException {
+
+        IdentityProvider idp = getIDPById(idpID);
+        List<ProvisioningConnectorConfig> provisioningConnectorConfigs = Arrays.asList(idp
+                .getProvisioningConnectorConfigs());
+        return (List<ProvisioningConnectorConfig>) paginationList(provisioningConnectorConfigs, limit, offset);
+    }
+
+    /**
      * Get the existing list of identity providers in the system.
      *
      * @return List of existing Identity Providers in the system as Identity Providers.
      * @throws IdentityProviderManagementException IdentityProviderManagementException.
      */
-    public List<IdentityProvider> getIDPs() throws
-            IdentityProviderManagementException {
+    public List<IdentityProvider> getIDPs(Integer limit, Integer offset) throws
+            IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        return identityProviderManager.getIdPs(tenantDomain);
+        List<IdentityProvider> identityProviders = identityProviderManager.getIdPs(tenantDomain);
+
+        return (List<IdentityProvider>) paginationList(identityProviders, limit, offset);
     }
 
+    private List<?> paginationList(List<?> listToBePaginated, Integer limit, Integer offset) throws
+            IDPMgtBridgeServiceException {
+
+        if (limit == null) {
+            limit = 100;
+        }
+
+        if (offset == null) {
+            offset = 0;
+        }
+
+        validatePaginationParameters(limit, offset);
+
+        int endIndex;
+        if (listToBePaginated.size() <= (limit + offset)) {
+            endIndex = listToBePaginated.size();
+        }
+        else {
+            endIndex = (limit + offset);
+        }
+        if (listToBePaginated.size() < offset) {
+            return new ArrayList<>();
+        }
+        return listToBePaginated.subList(offset, endIndex);
+    }
     /**
      * Updates an existing IDP.
      *
@@ -171,8 +235,8 @@ public class IDPMgtBridgeService {
      *
      * @param federatedAuthenticatorConfig federated authenticator that needs to be added
      * @param id id of the IDP
-     * @throws IdentityProviderManagementException
-     * @throws IDPMgtBridgeServiceException
+     * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
+     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
      */
     public void updateAuthenticator(FederatedAuthenticatorConfig federatedAuthenticatorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -196,8 +260,8 @@ public class IDPMgtBridgeService {
      *
      * @param receivedClaimConfig claim configuration that needs to be added
      * @param id id of the IDP
-     * @throws IdentityProviderManagementException
-     * @throws IDPMgtBridgeServiceException
+     * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
+     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
      */
     public void updateClaimConfiguration(ClaimConfig receivedClaimConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -216,8 +280,8 @@ public class IDPMgtBridgeService {
      *
      * @param permissionsAndRoleConfig role configuration that needs to be added
      * @param id id of the IDP
-     * @throws IdentityProviderManagementException
-     * @throws IDPMgtBridgeServiceException
+     * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
+     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
      */
     public void updateRoles(PermissionsAndRoleConfig permissionsAndRoleConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -235,8 +299,8 @@ public class IDPMgtBridgeService {
      *
      * @param justInTimeProvisioningConfig JIT provisioning configuration that needs to be added
      * @param id id of the IDP
-     * @throws IdentityProviderManagementException
-     * @throws IDPMgtBridgeServiceException
+     * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
+     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
      */
     public void updateJITProvisioningConfig(JustInTimeProvisioningConfig justInTimeProvisioningConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -255,8 +319,8 @@ public class IDPMgtBridgeService {
      *
      * @param provisioningConnectorConfig provisioning connector configuration that needs to be added
      * @param id id of the IDP
-     * @throws IdentityProviderManagementException
-     * @throws IDPMgtBridgeServiceException
+     * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
+     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
      */
     public void updateProvisioningConnectorConfig(ProvisioningConnectorConfig provisioningConnectorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -316,5 +380,12 @@ public class IDPMgtBridgeService {
 
         return StringUtils.equals(IdentityApplicationConstants.DEFAULT_IDP_CONFIG,
                 identityProvider.getIdentityProviderName());
+    }
+
+    private void validatePaginationParameters(int limit, int offset) throws IDPMgtBridgeServiceException {
+
+        if (limit < 0 || offset < 0) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_ARGS_FOR_LIMIT_OFFSET, null);
+        }
     }
 }
