@@ -75,7 +75,9 @@ paths:
 #-----------------------------------------------------
     post:
       x-scope: idp:idp_view
-      x-wso2-curl: "curl -k -X POST \"https://localhost:9443/api/identity/idp-mgt/v1.0/idps\" -H \"Authorization: Basic Base64Encoded<username:password>\" -H \"accept: application/json\"-H \"Content-Type: application/json\" -d @data.json "
+      x-wso2-curl: "curl -k -X POST \"https://localhost:9443/api/identity/idp-mgt/v1.0/idps\" -H \"Authorization:
+      Basic Base64Encoded<username:password>\" -H \"accept: application/json\"-H \"Content-Type: application/json\"
+      -d @data.json -H \"Content-Type:application/json\""
       x-wso2-response: |
       summary: Create a new IdP
       description: |
@@ -124,7 +126,8 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET \"https://localhost:9443/api/identity/idp-mgt/v1.0/idps\" -H \"Authorization: Basic Base64Encoded<username:password>\" -H \"Accept: application/json\""
+      x-wso2-curl: "curl -K -X GET \"https://localhost:9443/api/identity/idp-mgt/v1.0/idps\" -H \"Authorization:
+      Basic Base64Encoded<username:password>\" -H \"Accept: application/json\""
       x-wso2-request: |
         GET https://localhost:9443/api/identity/idp-mgt/v1.0/idps?limit=25&offset=0 -H Accept: application/json
 
@@ -261,9 +264,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id} -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id} -H
+      \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json - H
+      \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id} -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id} -H \"Authorization: Basic
+        YWRtaW46YWRtaW4K -H Accept: application/json -H Content-Type:application/json
       x-wso2-response: |
       summary: |
         update an existing IdP
@@ -356,9 +362,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H Content-Type:application/json
       x-wso2-response: |
       summary: |
         update an authenticator in a given identity provider
@@ -451,9 +460,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H \"Content-Type:application/json\"
       x-wso2-response: |
       summary: |
         update an existing claim configuration in a given identity provider
@@ -498,9 +510,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json"
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
       x-wso2-response: |
       summary: |
         list roles for a given identity provider
@@ -546,9 +561,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H Content-Type:application/json
       x-wso2-response: |
       summary: |
         update role configuration in a given identity provider
@@ -593,9 +611,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H Content-Type:application/json
       x-wso2-response: |
       summary: |
         list jit provisioning for a given identity provider
@@ -639,9 +660,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H Content-Type:application/json
       x-wso2-response: |
       summary: |
         update jit provisioning in a given identity provider
@@ -686,9 +710,11 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
       x-wso2-response: |
       summary: |
         list out bound connectors for a given identity provider
@@ -734,9 +760,12 @@ paths:
       produces:
         - application/json
         - application/gzip
-      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept: application/json"
+      x-wso2-curl: "curl -K -X GET https://apis.wso2.com//t/{tenant-domain}/api/identity/idp-mgt/v1
+      .0/idps/{id}/autheticators/ -H \"Authorization: Basic Base64Encoded<username:password>\ -H Accept:
+      application/json -H \"Content-Type:application/json\""
       x-wso2-request: |
-        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H \"Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json
+        GET https://localhost:9443/t/{tenant-domain}/api/identity/idp-mgt/v1.0/idps/{id}/autheticators/ -H
+        Authorization: Basic YWRtaW46YWRtaW4K -H Accept: application/json -H \"Content-Type:application/json\"
       x-wso2-response: |
       summary: |
         update outbound connector in a given identity provider

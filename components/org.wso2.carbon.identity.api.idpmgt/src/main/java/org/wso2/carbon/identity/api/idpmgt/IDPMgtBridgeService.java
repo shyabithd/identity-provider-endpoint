@@ -35,7 +35,6 @@ import org.wso2.carbon.idp.mgt.IdentityProviderManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.ws.rs.core.Response;
 
 public class IDPMgtBridgeService {
 
@@ -69,6 +68,10 @@ public class IDPMgtBridgeService {
         String tenantDomain = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         IdentityProvider idpById = getIDPById(idpID);
         identityProviderManager.deleteIdP(idpById.getIdentityProviderName(), tenantDomain);
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Idp is deleted: %s", idpById));
+        }
     }
 
     /**
@@ -88,6 +91,9 @@ public class IDPMgtBridgeService {
                 tenantDomain);
         validateIDPName(identityProvider, oldIDP);
         identityProviderManager.addIdP(identityProvider, tenantDomain);
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Idp is added: %s", identityProvider.getIdentityProviderName()));
+        }
         return identityProviderManager.getIdPByName(identityProvider.getIdentityProviderName(), tenantDomain);
     }
 
@@ -155,9 +161,19 @@ public class IDPMgtBridgeService {
 
         validateDuplicateIDPs(identityProvider, tenantDomain, decodedIDPId, oldIDP);
         identityProviderManager.updateIdP(oldIDP.getIdentityProviderName(), identityProvider, tenantDomain);
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Idp is updated: %s", identityProvider.getIdentityProviderName()));
+        }
         return identityProviderManager.getIdPByName(identityProvider.getIdentityProviderName(), tenantDomain);
     }
 
+    /**
+     *
+     * @param federatedAuthenticatorConfig federated authenticator that needs to be added
+     * @param id id of the IDP
+     * @throws IdentityProviderManagementException
+     * @throws IDPMgtBridgeServiceException
+     */
     public void updateAuthenticator(FederatedAuthenticatorConfig federatedAuthenticatorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
@@ -165,36 +181,83 @@ public class IDPMgtBridgeService {
         FederatedAuthenticatorConfig[] federatedAuthenticatorConfigs = idp.getFederatedAuthenticatorConfigs();
         List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigsAsList = Arrays.asList
                 (federatedAuthenticatorConfigs);
-        federatedAuthenticatorConfigsAsList.add(federatedAuthenticatorConfig);
-        idp.setFederatedAuthenticatorConfigs(federatedAuthenticatorConfigsAsList.toArray(new
+        List<FederatedAuthenticatorConfig> updatedList = new ArrayList<>(federatedAuthenticatorConfigsAsList);
+        updatedList.add(federatedAuthenticatorConfig);
+        idp.setFederatedAuthenticatorConfigs(updatedList.toArray(new
                 FederatedAuthenticatorConfig[0]));
         updateIDP(idp, id);
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Authentication: %s is added to IDP: %s", federatedAuthenticatorConfig
+                    .getDisplayName(), idp.getIdentityProviderName()));
+        }
     }
 
+    /**
+     *
+     * @param receivedClaimConfig claim configuration that needs to be added
+     * @param id id of the IDP
+     * @throws IdentityProviderManagementException
+     * @throws IDPMgtBridgeServiceException
+     */
     public void updateClaimConfiguration(ClaimConfig receivedClaimConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         IdentityProvider idp = getIDPById(id);
         idp.setClaimConfig(receivedClaimConfig);
         updateIDP(idp, id);
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Claim: %s is added to IDP: %s", receivedClaimConfig
+                    .getUserClaimURI(), idp.getIdentityProviderName()));
+        }
     }
 
+    /**
+     *
+     * @param permissionsAndRoleConfig role configuration that needs to be added
+     * @param id id of the IDP
+     * @throws IdentityProviderManagementException
+     * @throws IDPMgtBridgeServiceException
+     */
     public void updateRoles(PermissionsAndRoleConfig permissionsAndRoleConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         IdentityProvider idp = getIDPById(id);
         idp.setPermissionAndRoleConfig(permissionsAndRoleConfig);
         updateIDP(idp, id);
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("New permission set is added to IDP: %s", idp.getIdentityProviderName()));
+        }
     }
 
+    /**
+     *
+     * @param justInTimeProvisioningConfig JIT provisioning configuration that needs to be added
+     * @param id id of the IDP
+     * @throws IdentityProviderManagementException
+     * @throws IDPMgtBridgeServiceException
+     */
     public void updateJITProvisioningConfig(JustInTimeProvisioningConfig justInTimeProvisioningConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         IdentityProvider idp = getIDPById(id);
         idp.setJustInTimeProvisioningConfig(justInTimeProvisioningConfig);
         updateIDP(idp, id);
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("New JIT provisioning set: %s is added to IDP: %s", justInTimeProvisioningConfig
+                    .getUserStoreClaimUri(), idp.getIdentityProviderName()));
+        }
     }
 
+    /**
+     *
+     * @param provisioningConnectorConfig provisioning connector configuration that needs to be added
+     * @param id id of the IDP
+     * @throws IdentityProviderManagementException
+     * @throws IDPMgtBridgeServiceException
+     */
     public void updateProvisioningConnectorConfig(ProvisioningConnectorConfig provisioningConnectorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
@@ -203,10 +266,16 @@ public class IDPMgtBridgeService {
         ProvisioningConnectorConfig[] provisioningConnectorConfigs = idp.getProvisioningConnectorConfigs();
         List<ProvisioningConnectorConfig> provisioningConnectorConfigsList = Arrays.asList
                 (provisioningConnectorConfigs);
-        provisioningConnectorConfigsList.add(provisioningConnectorConfig);
-        idp.setProvisioningConnectorConfigs(provisioningConnectorConfigsList.toArray(new
+        List<ProvisioningConnectorConfig> updatedList = new ArrayList<>(provisioningConnectorConfigsList);
+        updatedList.add(provisioningConnectorConfig);
+        idp.setProvisioningConnectorConfigs(updatedList.toArray(new
                 ProvisioningConnectorConfig[0]));
         updateIDP(idp, id);
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("New provisioning connector: %s is added to IDP: %s",
+                    provisioningConnectorConfig.getName(), idp.getIdentityProviderName()));
+        }
     }
     private void validateDuplicateIDPs(IdentityProvider identityProvider, String tenantDomain, String decodedIDPId,
                                        IdentityProvider oldIDP) throws
