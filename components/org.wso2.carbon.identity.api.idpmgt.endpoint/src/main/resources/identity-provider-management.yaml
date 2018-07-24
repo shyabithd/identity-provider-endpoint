@@ -1109,7 +1109,10 @@ definitions:
         items:
           $ref: '#/definitions/ClaimMapping'
       idpClaims:
-        $ref: '#/definitions/Claim'
+        type: array
+        description: claimMappings
+        items:
+          $ref: '#/definitions/Claim'
       localClaimDialect:
         type: boolean
         description: localClaimDialect
@@ -1119,9 +1122,10 @@ definitions:
         description: roleClaimURI
         example: roleClaimURI
       spClaimDialects:
-        type: string
+        type: array
         description: spClaimDialects
-        example: spClaimDialects
+        items:
+          type: string
       userClaimURI:
         type: string
         description: userClaimURI

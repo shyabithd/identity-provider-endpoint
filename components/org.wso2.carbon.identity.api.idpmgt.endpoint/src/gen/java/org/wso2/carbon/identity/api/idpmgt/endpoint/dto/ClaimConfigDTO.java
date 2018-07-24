@@ -25,7 +25,7 @@ public class ClaimConfigDTO  {
   private List<ClaimMappingDTO> claimMappings = new ArrayList<ClaimMappingDTO>();
   
   
-  private ClaimDTO idpClaims = null;
+  private List<ClaimDTO> idpClaims = new ArrayList<ClaimDTO>();
   
   
   private Boolean localClaimDialect = null;
@@ -34,7 +34,7 @@ public class ClaimConfigDTO  {
   private String roleClaimURI = null;
   
   
-  private String spClaimDialects = null;
+  private List<String> spClaimDialects = new ArrayList<String>();
   
   
   private String userClaimURI = null;
@@ -67,13 +67,14 @@ public class ClaimConfigDTO  {
 
   
   /**
+   * claimMappings
    **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "claimMappings")
   @JsonProperty("idpClaims")
-  public ClaimDTO getIdpClaims() {
+  public List<ClaimDTO> getIdpClaims() {
     return idpClaims;
   }
-  public void setIdpClaims(ClaimDTO idpClaims) {
+  public void setIdpClaims(List<ClaimDTO> idpClaims) {
     this.idpClaims = idpClaims;
   }
 
@@ -109,10 +110,10 @@ public class ClaimConfigDTO  {
    **/
   @ApiModelProperty(value = "spClaimDialects")
   @JsonProperty("spClaimDialects")
-  public String getSpClaimDialects() {
+  public List<String> getSpClaimDialects() {
     return spClaimDialects;
   }
-  public void setSpClaimDialects(String spClaimDialects) {
+  public void setSpClaimDialects(List<String> spClaimDialects) {
     this.spClaimDialects = spClaimDialects;
   }
 

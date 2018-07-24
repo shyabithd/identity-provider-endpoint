@@ -1,12 +1,13 @@
 package org.wso2.carbon.identity.api.idpmgt.endpoint;
 
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.identity.api.idpmgt.Constants;
 import org.wso2.carbon.identity.api.idpmgt.IDPMgtBridgeServiceException;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.Exceptions.BadRequestException;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.Exceptions.InternalServerErrorException;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ApplicationPermissionDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimConfigDTO;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimDTO;
+import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ClaimMappingDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ErrorDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.FederatedAuthenticatorConfigDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.IdPDetailDTO;
@@ -18,7 +19,9 @@ import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.PropertyDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.ProvisioningConnectorConfigDTO;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.dto.RoleMappingDTO;
 import org.wso2.carbon.identity.application.common.model.ApplicationPermission;
+import org.wso2.carbon.identity.application.common.model.Claim;
 import org.wso2.carbon.identity.application.common.model.ClaimConfig;
+import org.wso2.carbon.identity.application.common.model.ClaimMapping;
 import org.wso2.carbon.identity.application.common.model.FederatedAuthenticatorConfig;
 import org.wso2.carbon.identity.application.common.model.IdentityProvider;
 import org.apache.commons.logging.Log;
@@ -282,25 +285,29 @@ public class EndpointUtils {
             permissionsAndRoleConfigDTO.setIdpRoles(Arrays.asList(permissionsAndRoleConfig.getIdpRoles()));
 
             ApplicationPermission[] applicationPermissions = permissionsAndRoleConfig.getPermissions();
-            List<ApplicationPermissionDTO> applicationPermissionDTOs = new ArrayList<>();
-            for (ApplicationPermission applicationPermission : applicationPermissions) {
-                ApplicationPermissionDTO applicationPermissionDTO = new ApplicationPermissionDTO();
-                applicationPermissionDTO.setValue(applicationPermission.getValue());
-                applicationPermissionDTOs.add(applicationPermissionDTO);
+            if (applicationPermissions != null) {
+                List<ApplicationPermissionDTO> applicationPermissionDTOs = new ArrayList<>();
+                for (ApplicationPermission applicationPermission : applicationPermissions) {
+                    ApplicationPermissionDTO applicationPermissionDTO = new ApplicationPermissionDTO();
+                    applicationPermissionDTO.setValue(applicationPermission.getValue());
+                    applicationPermissionDTOs.add(applicationPermissionDTO);
+                }
+                permissionsAndRoleConfigDTO.setPermissions(applicationPermissionDTOs);
             }
-            permissionsAndRoleConfigDTO.setPermissions(applicationPermissionDTOs);
-
             RoleMapping[] roleMappings = permissionsAndRoleConfig.getRoleMappings();
-            List<RoleMappingDTO> roleMappingDTOs = new ArrayList<>();
-            for (RoleMapping roleMapping : roleMappings) {
-                RoleMappingDTO roleMappingDTO = new RoleMappingDTO();
-                LocalRoleDTO localRoleDTO = new LocalRoleDTO();
-                localRoleDTO.setLocalRoleName(roleMapping.getLocalRole().getLocalRoleName());
-                localRoleDTO.setUserStoreId(roleMapping.getLocalRole().getUserStoreId());
-                roleMappingDTO.setLocalRole(localRoleDTO);
-                roleMapping.setRemoteRole(roleMappingDTO.getRemoteRole());
+            if (roleMappings != null) {
+                List<RoleMappingDTO> roleMappingDTOs = new ArrayList<>();
+                for (RoleMapping roleMapping : roleMappings) {
+                    RoleMappingDTO roleMappingDTO = new RoleMappingDTO();
+                    LocalRoleDTO localRoleDTO = new LocalRoleDTO();
+                    localRoleDTO.setLocalRoleName(roleMapping.getLocalRole().getLocalRoleName());
+                    localRoleDTO.setUserStoreId(roleMapping.getLocalRole().getUserStoreId());
+                    roleMappingDTO.setLocalRole(localRoleDTO);
+                    roleMappingDTO.setRemoteRole(roleMapping.getRemoteRole());
+                    roleMappingDTOs.add(roleMappingDTO);
+                }
+                permissionsAndRoleConfigDTO.setRoleMappings(roleMappingDTOs);
             }
-            permissionsAndRoleConfigDTO.setRoleMappings(roleMappingDTOs);
         }
         return permissionsAndRoleConfigDTO;
     }
@@ -464,16 +471,60 @@ public class EndpointUtils {
             claimConfig.setRoleClaimURI(claimConfigDTO.getRoleClaimURI());
             claimConfig.setAlwaysSendMappedLocalSubjectId(claimConfigDTO.getAlwaysSendMappedLocalSubjectId());
             claimConfig.setLocalClaimDialect(claimConfigDTO.getLocalClaimDialect());
-            claimConfig.setRoleClaimURI(claimConfigDTO.getRoleClaimURI());
+            claimConfig.setUserClaimURI(claimConfigDTO.getUserClaimURI());
+            if (claimConfigDTO.getClaimMappings() != null) {
+                List<ClaimMapping> claimMappings = new ArrayList<>();
+                for (ClaimMappingDTO claimMappingDTO : claimConfigDTO.getClaimMappings()) {
+                    ClaimMapping claimMapping = new ClaimMapping();
+                    claimMapping.setDefaultValue(claimMappingDTO.getDefaultValue());
+                    claimMapping.setLocalClaim(createClaim(claimMappingDTO.getLocalClaim()));
+                    claimMapping.setMandatory(claimMappingDTO.getMandatory());
+                    claimMapping.setRequested(claimMappingDTO.getRequired());
+                    claimMapping.setRemoteClaim(createClaim(claimMappingDTO.getRemoteClaim()));
+                    claimMappings.add(claimMapping);
+                }
+                claimConfig.setClaimMappings(claimMappings.toArray(new ClaimMapping[0]));
+            }
+            if (claimConfigDTO.getSpClaimDialects() != null) {
+                claimConfig.setSpClaimDialects(claimConfigDTO.getSpClaimDialects().toArray(new String[0]));
+            }
+            if (claimConfigDTO.getIdpClaims() != null) {
+                List<Claim> claimConfigs = new ArrayList<>();
+                for (ClaimDTO claimDTO : claimConfigDTO.getIdpClaims()) {
+                    Claim claim = createClaim(claimDTO);
+                    claimConfigs.add(claim);
+                }
+                claimConfig.setIdpClaims(claimConfigs.toArray(new Claim[0]));
+            }
         }
         return claimConfig;
     }
 
-    /**
-     * Translate Claim Configuration to Claim Configuration DTO
-     * @param claimConfig Claim Configuration  that needs to be translated to Claim Configuration DTO
-     * @return claimConfigDTO
-     */
+    private static Claim createClaim(ClaimDTO claimDTO) {
+        Claim claim = null;
+        if (claimDTO != null) {
+            claim = new Claim();
+            claim.setClaimId(claimDTO.getClaimId());
+            claim.setClaimUri(claimDTO.getClaimUri());
+        }
+        return claim;
+    }
+
+    private static ClaimDTO createClaimDTO(Claim claim) {
+
+        ClaimDTO claimDTO = null;
+        if (claim != null) {
+            claimDTO = new ClaimDTO();
+            claimDTO.setClaimId(claim.getClaimId());
+            claimDTO.setClaimUri(claim.getClaimUri());
+        }
+        return claimDTO;
+    }
+        /**
+         * Translate Claim Configuration to Claim Configuration DTO
+         * @param claimConfig Claim Configuration  that needs to be translated to Claim Configuration DTO
+         * @return claimConfigDTO
+         */
     public static ClaimConfigDTO createClaimConfigDTO(ClaimConfig claimConfig) {
 
         ClaimConfigDTO claimConfigDTO = null;
@@ -483,7 +534,34 @@ public class EndpointUtils {
             claimConfigDTO.setRoleClaimURI(claimConfig.getRoleClaimURI());
             claimConfigDTO.setAlwaysSendMappedLocalSubjectId(claimConfig.isAlwaysSendMappedLocalSubjectId());
             claimConfigDTO.setLocalClaimDialect(claimConfig.isLocalClaimDialect());
-            claimConfigDTO.setRoleClaimURI(claimConfig.getRoleClaimURI());
+            claimConfigDTO.setUserClaimURI(claimConfig.getUserClaimURI());
+            if (claimConfig.getClaimMappings() != null) {
+                List<ClaimMappingDTO> claimMappingDTOs = new ArrayList<>();
+                for (ClaimMapping claimMapping : claimConfig.getClaimMappings()) {
+                    ClaimMappingDTO claimMappingDTO = new ClaimMappingDTO();
+                    claimMappingDTO.setDefaultValue(claimMapping.getDefaultValue());
+                    claimMappingDTO.setLocalClaim(createClaimDTO(claimMapping.getLocalClaim()));
+                    claimMappingDTO.setMandatory(claimMapping.isMandatory());
+                    claimMappingDTO.setRequired(claimMapping.isRequested());
+                    claimMappingDTO.setRemoteClaim(createClaimDTO(claimMapping.getRemoteClaim()));
+                    claimMappingDTOs.add(claimMappingDTO);
+                }
+                claimConfigDTO.setClaimMappings(claimMappingDTOs);
+            }
+            if (claimConfig.getSpClaimDialects() != null) {
+                claimConfigDTO.setSpClaimDialects(Arrays.asList(claimConfig.getSpClaimDialects()));
+            }
+            if (claimConfig.getIdpClaims() != null) {
+                ArrayList<Claim> claims = new ArrayList<>(Arrays.asList(claimConfig.getIdpClaims()));
+                List<ClaimDTO> claimConfigDTOS = new ArrayList<>();
+                for (Claim claim : claims) {
+                    ClaimDTO claimDTO = new ClaimDTO();
+                    claimDTO.setClaimId(claim.getClaimId());
+                    claimDTO.setClaimUri(claim.getClaimUri());
+                    claimConfigDTOS.add(claimDTO);
+                }
+                claimConfigDTO.setIdpClaims(claimConfigDTOS);
+            }
         }
         return claimConfigDTO;
     }
