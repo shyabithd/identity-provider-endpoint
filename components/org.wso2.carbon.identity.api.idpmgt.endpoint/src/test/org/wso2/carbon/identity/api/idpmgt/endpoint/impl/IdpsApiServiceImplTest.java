@@ -67,6 +67,26 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     @Mock
     private IdentityProvider identityProvider;
 
+    private final String name = "name";
+    private final String idp = "idp";
+    private final String provision = "provision";
+    private final String federated = "federated";
+    private final String prop = "property";
+    private final String serverUrl = "serverUrl";
+    private final String id = "idVal";
+    private final String alias = "alias";
+    private final String claim = "claim";
+    private final String display = "display";
+    private final String homeRealm = "homeRealm";
+    private final String claimUri = "claimUri";
+    private final String role = "role";
+    private final String description = "description";
+    private final String type = "type";
+    private final String value = "value";
+    private final String deflt = "default";
+    private final String provisioningRole = "provisioningRole";
+    private final String userStore = "userStore";
+
     @BeforeMethod
     public void setUp() throws IdentityProviderManagementException {
 
@@ -78,8 +98,8 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     private void initializeIdentityUtils() {
 
         mockStatic(IdentityUtil.class);
-        when(IdentityUtil.getServerURL(anyString(), anyBoolean(), anyBoolean())).thenReturn("test");
-        byte[] stringBuffer = ("id").getBytes();
+        when(IdentityUtil.getServerURL(anyString(), anyBoolean(), anyBoolean())).thenReturn(serverUrl);
+        byte[] stringBuffer = (id).getBytes();
         when(IdentityUtil.base58Decode(anyString())).thenReturn(stringBuffer);
     }
 
@@ -89,21 +109,21 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         IdentityProviderManager identityProviderManager = mock(IdentityProviderManager.class);
         when(IdentityProviderManager.getInstance()).thenReturn(identityProviderManager);
         when(identityProviderManager.getIdPByName(anyString(), anyString())).thenReturn(identityProvider);
-        when(identityProvider.getIdentityProviderName()).thenReturn("name");
-        when(identityProvider.getAlias()).thenReturn("alias");
-        when(identityProvider.getDisplayName()).thenReturn("displayName");
-        when(identityProvider.getHomeRealmId()).thenReturn("homeRealm");
-        when(identityProvider.getProvisioningRole()).thenReturn("role");
+        when(identityProvider.getIdentityProviderName()).thenReturn(idp+name);
+        when(identityProvider.getAlias()).thenReturn(alias);
+        when(identityProvider.getDisplayName()).thenReturn(display);
+        when(identityProvider.getHomeRealmId()).thenReturn(homeRealm);
+        when(identityProvider.getProvisioningRole()).thenReturn(role);
 
         ClaimConfig claimConfig = new ClaimConfig();
-        claimConfig.setUserClaimURI("claim");
+        claimConfig.setUserClaimURI(claim);
         claimConfig.setLocalClaimDialect(true);
         claimConfig.setAlwaysSendMappedLocalSubjectId(true);
-        claimConfig.setRoleClaimURI("claim");
+        claimConfig.setRoleClaimURI(claim);
         ClaimMapping claimMapping = new ClaimMapping();
         Claim claim = new Claim();
         claim.setClaimId(1);
-        claim.setClaimUri("claimUri");
+        claim.setClaimUri(claimUri);
         claimMapping.setRemoteClaim(claim);
         claimMapping.setLocalClaim(claim);
         List<ClaimMapping> claimMappings = new ArrayList<>();
@@ -115,17 +135,17 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
 
         List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigList = new ArrayList<>();
         FederatedAuthenticatorConfig federatedAuthenticatorConfig = new FederatedAuthenticatorConfig();
-        federatedAuthenticatorConfig.setDisplayName("displayName");
-        federatedAuthenticatorConfig.setName("name");
+        federatedAuthenticatorConfig.setDisplayName(display);
+        federatedAuthenticatorConfig.setName(federated+ name);
         federatedAuthenticatorConfig.setEnabled(true);
         List<Property> properties = new ArrayList<>();
         Property property = new Property();
-        property.setValue("value");
-        property.setType("type");
-        property.setName("name");
+        property.setValue(value);
+        property.setType(type);
+        property.setName(prop+name);
         property.setConfidential(true);
         property.setRequired(true);
-        property.setDefaultValue("default");
+        property.setDefaultValue(deflt);
         property.setAdvanced(true);
         properties.add(property);
         federatedAuthenticatorConfig.setProperties(properties.toArray(new Property[0]));
@@ -136,7 +156,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
 
         List<ProvisioningConnectorConfig> provisioningConnectorConfigs = new ArrayList<>();
         ProvisioningConnectorConfig provisioningConnectorConfig = new ProvisioningConnectorConfig();
-        provisioningConnectorConfig.setName("name");
+        provisioningConnectorConfig.setName(provision+name);
         provisioningConnectorConfig.setEnabled(true);
         provisioningConnectorConfig.setProvisioningProperties(properties.toArray(new Property[0]));
         provisioningConnectorConfigs.add(provisioningConnectorConfig);
@@ -163,7 +183,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         when(identityProvider.getPermissionAndRoleConfig()).thenReturn(permissionsAndRoleConfig);
 
         JustInTimeProvisioningConfig justInTimeProvisioningConfig = new JustInTimeProvisioningConfig();
-        justInTimeProvisioningConfig.setUserStoreClaimUri("userStore");
+        justInTimeProvisioningConfig.setUserStoreClaimUri(userStore);
         justInTimeProvisioningConfig.setPromptConsent(true);
         justInTimeProvisioningConfig.setPasswordProvisioningEnabled(true);
         justInTimeProvisioningConfig.setModifyUserNameAllowed(true);
@@ -188,15 +208,15 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     }
     private IdPDetailDTO getIdPDetailDTO() {
 
-        when(idPDetailDTO.getAlias()).thenReturn("alias");
-        when(idPDetailDTO.getId()).thenReturn("id");
-        when(idPDetailDTO.getDisplayName()).thenReturn("displayName");
-        when(idPDetailDTO.getIdentityProviderName()).thenReturn("name1");
+        when(idPDetailDTO.getAlias()).thenReturn(alias);
+        when(idPDetailDTO.getId()).thenReturn(id);
+        when(idPDetailDTO.getDisplayName()).thenReturn(display);
+        when(idPDetailDTO.getIdentityProviderName()).thenReturn(name);
         when(idPDetailDTO.getEnable()).thenReturn(true);
         when(idPDetailDTO.getFederationHub()).thenReturn(true);
-        when(idPDetailDTO.getHomeRealmId()).thenReturn("realmID");
-        when(idPDetailDTO.getIdentityProviderDescription()).thenReturn("description");
-        when(idPDetailDTO.getProvisioningRole()).thenReturn("provisioningRole");
+        when(idPDetailDTO.getHomeRealmId()).thenReturn(homeRealm);
+        when(idPDetailDTO.getIdentityProviderDescription()).thenReturn(description);
+        when(idPDetailDTO.getProvisioningRole()).thenReturn(provisioningRole);
 
         when(idPDetailDTO.getEnable()).thenReturn(false);
         return idPDetailDTO;
@@ -215,16 +235,16 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPGet() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdGet("id");
+        Response response = idpsApiService.idpsIdGet(id);
 
         Assert.assertEquals(response.getStatus(), 200);
         Assert.assertTrue(response.getEntity() instanceof IdPDetailDTO, "Object should be IDP Detail");
         IdPDetailDTO idPDetailDTOReceived = (IdPDetailDTO) response.getEntity();
-        Assert.assertEquals(idPDetailDTOReceived.getIdentityProviderName(), "name");
-        Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getRoleClaimURI(), "claim");
-        Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getUserClaimURI(), "claim");
+        Assert.assertEquals(idPDetailDTOReceived.getIdentityProviderName(), idp+name);
+        Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getRoleClaimURI(), claim);
+        Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getUserClaimURI(), claim);
         Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getClaimMappings().get(0).getRemoteClaim()
-                .getClaimUri(), "claimUri");
+                .getClaimUri(), claimUri);
         Assert.assertEquals(idPDetailDTOReceived.getClaimConfig().getClaimMappings().get(0).getLocalClaim()
                 .getClaimId(), (Integer) 1);
     }
@@ -233,7 +253,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPDelete() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdDelete("id");
+        Response response = idpsApiService.idpsIdDelete(id);
 
         Assert.assertEquals(response.getStatus(), 200);
     }
@@ -242,7 +262,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPUpdate() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdPut("id", getIdPDetailDTO());
+        Response response = idpsApiService.idpsIdPut(id, getIdPDetailDTO());
         Assert.assertEquals(response.getStatus(), 200);
     }
 
@@ -250,14 +270,14 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPGetAuthenticators() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdAuthenticatorsGet("id", 1, 0);
+        Response response = idpsApiService.idpsIdAuthenticatorsGet(id, 1, 0);
         Assert.assertEquals(response.getStatus(), 200);
         Assert.assertTrue(response.getEntity() instanceof List);
         List<?> entityList = (List<?>) response.getEntity();
         Assert.assertFalse(entityList.isEmpty());
         Assert.assertTrue(entityList.get(0) instanceof FederatedAuthenticatorConfigDTO);
-        Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getName(), ("name"));
-        Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getDisplayName(), ("displayName"));
+        Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getName(), (federated+name));
+        Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getDisplayName(), (display));
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
                 .getDefaultValue(), "default");
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
@@ -265,7 +285,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
                 .getValue(), "value");
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
-                .getName(), "name");
+                .getName(), prop+name);
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
                 .getRequired(), (Boolean) true);
         Assert.assertEquals(((FederatedAuthenticatorConfigDTO)entityList.get(0)).getPropertyList().get(0)
@@ -276,7 +296,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPGetOutboundConnectors() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdOutboundConnectorsGet("id", 1, 0);
+        Response response = idpsApiService.idpsIdOutboundConnectorsGet(id, 1, 0);
         Assert.assertEquals(response.getStatus(), 200);
         Assert.assertTrue(response.getEntity() instanceof List);
 
@@ -284,17 +304,17 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         Assert.assertFalse(entityList.isEmpty());
 
         Assert.assertTrue(entityList.get(0) instanceof ProvisioningConnectorConfigDTO);
-        Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getName(), ("name"));
+        Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getName(), (provision+name));
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getEnabled(), (Boolean) (true));
 
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
-                .getDefaultValue(), "default");
+                .getDefaultValue(), deflt);
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
-                .getType(), "type");
+                .getType(), type);
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
-                .getValue(), "value");
+                .getValue(), value);
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
-                .getName(), "name");
+                .getName(), prop+name);
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
                 .getRequired(), (Boolean) true);
         Assert.assertEquals(((ProvisioningConnectorConfigDTO)entityList.get(0)).getProvisioningProperties().get(0)
@@ -305,7 +325,7 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
     public void testIdPGetRoles() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdRolesGet("id");
+        Response response = idpsApiService.idpsIdRolesGet(id);
         Assert.assertEquals(response.getStatus(), 200);
         Assert.assertTrue(response.getEntity() instanceof PermissionsAndRoleConfigDTO);
         Assert.assertEquals(((PermissionsAndRoleConfigDTO)response.getEntity()).getIdpRoles().get(0), ("role1"));
@@ -321,14 +341,14 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         Assert.assertEquals(((PermissionsAndRoleConfigDTO)response.getEntity()).getRoleMappings().get(0).getLocalRole
                 ().getLocalRoleName(), ("role1"));
         Assert.assertEquals(((PermissionsAndRoleConfigDTO)response.getEntity()).getRoleMappings().get(0).getLocalRole
-                ().getUserStoreId(), ("userStore"));
+                ().getUserStoreId(), (userStore));
     }
 
     @Test
     public void testIdPGetJITProvisioning() {
 
         IdpsApiServiceImpl idpsApiService = new IdpsApiServiceImpl();
-        Response response = idpsApiService.idpsIdJitProvisioningGet("id");
+        Response response = idpsApiService.idpsIdJitProvisioningGet(id);
         Assert.assertEquals(response.getStatus(), 200);
         Assert.assertTrue(response.getEntity() instanceof JustInTimeProvisioningConfigDTO);
         Assert.assertEquals(((JustInTimeProvisioningConfigDTO)response.getEntity()).getModifyUserNameAllowed
@@ -338,6 +358,6 @@ public class IdpsApiServiceImplTest extends PowerMockTestCase {
         Assert.assertEquals(((JustInTimeProvisioningConfigDTO)response.getEntity()).getModifyUserNameAllowed(),
                 (Boolean) true);
         Assert.assertEquals(((JustInTimeProvisioningConfigDTO)response.getEntity()).getUserStoreClaimUri(),
-                "userStore");
+                userStore);
     }
 }
