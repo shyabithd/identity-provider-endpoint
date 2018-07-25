@@ -143,11 +143,16 @@ public class IDPMgtBridgeService {
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         IdentityProvider idp = getIDPById(idpID);
-        List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs = Arrays.asList(idp
-                .getFederatedAuthenticatorConfigs());
 
-        Pair<Integer, Integer> indexValue = paginationList(federatedAuthenticatorConfigs.size(), limit, offset);
-        return federatedAuthenticatorConfigs.subList(indexValue.getKey(), indexValue.getValue());
+        if (ArrayUtils.isNotEmpty(idp.getFederatedAuthenticatorConfigs())) {
+            List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs = Arrays.asList(idp
+                    .getFederatedAuthenticatorConfigs());
+            Pair<Integer, Integer> indexValue = paginationList(federatedAuthenticatorConfigs.size(), limit, offset);
+            return federatedAuthenticatorConfigs.subList(indexValue.getKey(), indexValue.getValue());
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -165,11 +170,16 @@ public class IDPMgtBridgeService {
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
         IdentityProvider idp = getIDPById(idpID);
-        List<ProvisioningConnectorConfig> provisioningConnectorConfigs = Arrays.asList(idp
-                .getProvisioningConnectorConfigs());
 
-        Pair<Integer, Integer> indexValue = paginationList(provisioningConnectorConfigs.size(), limit, offset);
-        return provisioningConnectorConfigs.subList(indexValue.getKey(), indexValue.getValue());
+        if (ArrayUtils.isNotEmpty(idp.getProvisioningConnectorConfigs())) {
+            List<ProvisioningConnectorConfig> provisioningConnectorConfigs = Arrays.asList(idp
+                    .getProvisioningConnectorConfigs());
+            Pair<Integer, Integer> indexValue = paginationList(provisioningConnectorConfigs.size(), limit, offset);
+            return provisioningConnectorConfigs.subList(indexValue.getKey(), indexValue.getValue());
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -269,6 +279,9 @@ public class IDPMgtBridgeService {
         validateFederatedAuthenticatorConfig(federatedAuthenticatorConfig);
         IdentityProvider idp = getIDPById(id);
         FederatedAuthenticatorConfig[] federatedAuthenticatorConfigs = idp.getFederatedAuthenticatorConfigs();
+        if (federatedAuthenticatorConfigs == null) {
+            federatedAuthenticatorConfigs = new ArrayList<FederatedAuthenticatorConfig>().toArray(new FederatedAuthenticatorConfig[0]);
+        }
         List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigsAsList = Arrays.asList
                 (federatedAuthenticatorConfigs);
         List<FederatedAuthenticatorConfig> updatedList = new ArrayList<>(federatedAuthenticatorConfigsAsList);
@@ -383,6 +396,9 @@ public class IDPMgtBridgeService {
         validateProvisioningConf(provisioningConnectorConfig);
         IdentityProvider idp = getIDPById(id);
         ProvisioningConnectorConfig[] provisioningConnectorConfigs = idp.getProvisioningConnectorConfigs();
+        if (provisioningConnectorConfigs == null) {
+            provisioningConnectorConfigs = new ArrayList<ProvisioningConnectorConfig>().toArray(new ProvisioningConnectorConfig[0]);
+        }
         List<ProvisioningConnectorConfig> provisioningConnectorConfigsList = Arrays.asList
                 (provisioningConnectorConfigs);
         List<ProvisioningConnectorConfig> updatedList = new ArrayList<>(provisioningConnectorConfigsList);

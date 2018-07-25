@@ -1,6 +1,7 @@
 package org.wso2.carbon.identity.api.idpmgt.endpoint;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.logging.Log;
 import org.wso2.carbon.identity.api.idpmgt.Constants;
 import org.wso2.carbon.identity.api.idpmgt.IDPMgtBridgeServiceException;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.Exceptions.BadRequestException;
@@ -25,7 +26,6 @@ import org.wso2.carbon.identity.application.common.model.ClaimConfig;
 import org.wso2.carbon.identity.application.common.model.ClaimMapping;
 import org.wso2.carbon.identity.application.common.model.FederatedAuthenticatorConfig;
 import org.wso2.carbon.identity.application.common.model.IdentityProvider;
-import org.apache.commons.logging.Log;
 import org.wso2.carbon.identity.application.common.model.IdentityProviderProperty;
 import org.wso2.carbon.identity.application.common.model.JustInTimeProvisioningConfig;
 import org.wso2.carbon.identity.application.common.model.LocalRole;
@@ -67,8 +67,8 @@ public class EndpointUtils {
         identityProviderDTO.setFederationHub(identityProvider.isFederationHub());
         identityProviderDTO.setCertificate(identityProvider.getCertificate());
         identityProviderDTO.setPrimary(identityProvider.isPrimary());
-        identityProviderDTO.setProvisioningRole(identityProvider.getAlias());
-        identityProviderDTO.setIdentityProviderName(identityProvider.getAlias());
+        identityProviderDTO.setProvisioningRole(identityProvider.getProvisioningRole());
+        identityProviderDTO.setIdentityProviderName(identityProvider.getIdentityProviderName());
         identityProviderDTO.setIdentityProviderDescription(identityProvider.getIdentityProviderDescription());
 
         //Default authenticated configurations
@@ -135,7 +135,7 @@ public class EndpointUtils {
         IdentityProvider identityProvider = new IdentityProvider();
 
         //Basic information related to Identity Provider
-        identityProvider.setIdentityProviderName(identityProviderDTO.getDisplayName());
+        identityProvider.setIdentityProviderName(identityProviderDTO.getIdentityProviderName());
         identityProvider.setId(identityProviderDTO.getId());
         identityProvider.setAlias(identityProviderDTO.getAlias());
         identityProvider.setCertificate(identityProviderDTO.getCertificate());
@@ -466,9 +466,11 @@ public class EndpointUtils {
         ProvisioningConnectorConfigDTO provisioningConnectorConfigDTO = null;
         if (provisioningConnectorConfig != null) {
             provisioningConnectorConfigDTO = new ProvisioningConnectorConfigDTO();
-            provisioningConnectorConfigDTO.setBlocking(provisioningConnectorConfigDTO.getBlocking());
-            provisioningConnectorConfigDTO.setName(provisioningConnectorConfigDTO.getName());
-            provisioningConnectorConfigDTO.setEnabled(provisioningConnectorConfigDTO.getEnabled());
+            provisioningConnectorConfigDTO.setBlocking(provisioningConnectorConfig.isBlocking());
+            provisioningConnectorConfigDTO.setName(provisioningConnectorConfig.getName());
+            provisioningConnectorConfigDTO.setEnabled(provisioningConnectorConfig.isEnabled());
+            provisioningConnectorConfigDTO.setValid(provisioningConnectorConfig.isValid());
+            provisioningConnectorConfigDTO.setRulesEnabled(provisioningConnectorConfig.isRulesEnabled());
             if (ArrayUtils.isNotEmpty(provisioningConnectorConfig.getProvisioningProperties())) {
                 List<PropertyDTO> propertyListDTO = getPropertyListDTO(Arrays.asList(provisioningConnectorConfig
                         .getProvisioningProperties()));
