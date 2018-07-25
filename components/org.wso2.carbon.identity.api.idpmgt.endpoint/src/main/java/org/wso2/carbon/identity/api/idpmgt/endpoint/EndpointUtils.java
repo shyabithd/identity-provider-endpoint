@@ -1,5 +1,6 @@
 package org.wso2.carbon.identity.api.idpmgt.endpoint;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.wso2.carbon.identity.api.idpmgt.Constants;
 import org.wso2.carbon.identity.api.idpmgt.IDPMgtBridgeServiceException;
 import org.wso2.carbon.identity.api.idpmgt.endpoint.Exceptions.BadRequestException;
@@ -84,16 +85,18 @@ public class EndpointUtils {
         //Federated authenticator configurations
         FederatedAuthenticatorConfig[] federatedAuthenticatorConfigs = identityProvider
                 .getFederatedAuthenticatorConfigs();
-        List<FederatedAuthenticatorConfigDTO> federatedAuthenticatorConfigDTOs = createFederatorAuthenticatorDTOList
-                (Arrays.asList(federatedAuthenticatorConfigs));
-        identityProviderDTO.setFederatedAuthenticatorConfigs(federatedAuthenticatorConfigDTOs);
-
+        if (ArrayUtils.isNotEmpty(federatedAuthenticatorConfigs)) {
+            List<FederatedAuthenticatorConfigDTO> federatedAuthenticatorConfigDTOs = createFederatorAuthenticatorDTOList
+                    (Arrays.asList(federatedAuthenticatorConfigs));
+            identityProviderDTO.setFederatedAuthenticatorConfigs(federatedAuthenticatorConfigDTOs);
+        }
         //Identity Provider Properties
         IdentityProviderProperty[] identityProviderProperties = identityProvider.getIdpProperties();
-        List<IdentityProviderPropertyDTO> identityProviderPropertyDTOs = createIdentityProviderDTOProperties
-                (Arrays.asList(identityProviderProperties));
-        identityProviderDTO.setIdpProperties(identityProviderPropertyDTOs);
-
+        if (ArrayUtils.isNotEmpty(identityProviderProperties)) {
+            List<IdentityProviderPropertyDTO> identityProviderPropertyDTOs = createIdentityProviderDTOProperties
+                    (Arrays.asList(identityProviderProperties));
+            identityProviderDTO.setIdpProperties(identityProviderPropertyDTOs);
+        }
         // JustInTime Provisioning Configurations
         JustInTimeProvisioningConfigDTO justInTimeProvisioningConfigDTO = createJustinTimeProvisioningConfigDTO
                 (identityProvider.getJustInTimeProvisioningConfig());
@@ -106,10 +109,11 @@ public class EndpointUtils {
         //Provisioning Connector Configurations
         ProvisioningConnectorConfig[] provisioningConnectorConfigs = identityProvider
                 .getProvisioningConnectorConfigs();
-        List<ProvisioningConnectorConfigDTO> provisioningConnectorConfigDTOs = createProvisioningConnectorConfigDTOs
-                (Arrays.asList(provisioningConnectorConfigs));
-        identityProviderDTO.setProvisioningConnectorConfigs(provisioningConnectorConfigDTOs);
-
+        if (ArrayUtils.isNotEmpty(provisioningConnectorConfigs)) {
+            List<ProvisioningConnectorConfigDTO> provisioningConnectorConfigDTOs = createProvisioningConnectorConfigDTOs
+                    (Arrays.asList(provisioningConnectorConfigs));
+            identityProviderDTO.setProvisioningConnectorConfigs(provisioningConnectorConfigDTOs);
+        }
         return identityProviderDTO;
     }
 
@@ -283,8 +287,9 @@ public class EndpointUtils {
         PermissionsAndRoleConfigDTO permissionsAndRoleConfigDTO = null;
         if (permissionsAndRoleConfig != null) {
             permissionsAndRoleConfigDTO = new PermissionsAndRoleConfigDTO();
-            permissionsAndRoleConfigDTO.setIdpRoles(Arrays.asList(permissionsAndRoleConfig.getIdpRoles()));
-
+            if (permissionsAndRoleConfig.getIdpRoles() != null) {
+                permissionsAndRoleConfigDTO.setIdpRoles(Arrays.asList(permissionsAndRoleConfig.getIdpRoles()));
+            }
             ApplicationPermission[] applicationPermissions = permissionsAndRoleConfig.getPermissions();
             if (applicationPermissions != null) {
                 List<ApplicationPermissionDTO> applicationPermissionDTOs = new ArrayList<>();
@@ -450,9 +455,11 @@ public class EndpointUtils {
             provisioningConnectorConfigDTO.setBlocking(provisioningConnectorConfigDTO.getBlocking());
             provisioningConnectorConfigDTO.setName(provisioningConnectorConfigDTO.getName());
             provisioningConnectorConfigDTO.setEnabled(provisioningConnectorConfigDTO.getEnabled());
-            List<PropertyDTO> propertyListDTO = getPropertyListDTO(Arrays.asList(provisioningConnectorConfig
-                    .getProvisioningProperties()));
-            provisioningConnectorConfigDTO.setProvisioningProperties(propertyListDTO);
+            if (ArrayUtils.isNotEmpty(provisioningConnectorConfig.getProvisioningProperties())) {
+                List<PropertyDTO> propertyListDTO = getPropertyListDTO(Arrays.asList(provisioningConnectorConfig
+                        .getProvisioningProperties()));
+                provisioningConnectorConfigDTO.setProvisioningProperties(propertyListDTO);
+            }
             provisioningConnectorConfigDTO.setRulesEnabled(provisioningConnectorConfigDTO.getRulesEnabled());
         }
         return provisioningConnectorConfigDTO;
@@ -599,8 +606,10 @@ public class EndpointUtils {
             federatedAuthenticatorConfigDTO.setEnabled(federatedAuthenticatorConfig.isEnabled());
             federatedAuthenticatorConfigDTO.setName(federatedAuthenticatorConfig.getName());
 
-            List<PropertyDTO> propertyList = getPropertyListDTO(Arrays.asList(federatedAuthenticatorConfig.getProperties()));
-            federatedAuthenticatorConfigDTO.setPropertyList(propertyList);
+            if (ArrayUtils.isNotEmpty(federatedAuthenticatorConfig.getProperties())) {
+                List<PropertyDTO> propertyList = getPropertyListDTO(Arrays.asList(federatedAuthenticatorConfig.getProperties()));
+                federatedAuthenticatorConfigDTO.setPropertyList(propertyList);
+            }
         }
         return federatedAuthenticatorConfigDTO;
     }
