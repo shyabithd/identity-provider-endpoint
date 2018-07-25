@@ -41,9 +41,13 @@ import java.util.List;
 
 public class EndpointUtils {
 
-    private EndpointUtils() {}
+    private EndpointUtils() {
+
+    }
+
     /**
      * Translate identityProvider to identityProviderDTO
+     *
      * @param identityProvider identity provider that needs to be translated to identity provider DTO
      * @return IdPDetailDTO
      */
@@ -119,6 +123,7 @@ public class EndpointUtils {
 
     /**
      * Translate identityProviderDTP to identityProvider
+     *
      * @param identityProviderDTO identity providerDTO that needs to be translated to identity provider
      * @return IdPDetail
      */
@@ -193,6 +198,7 @@ public class EndpointUtils {
 
     /**
      * Translate identityProvider list to identityProviderDTO list
+     *
      * @param idpList identity provider list that needs to be translated to identity provider DTO list
      * @return IdPDetailDTO list
      */
@@ -207,12 +213,13 @@ public class EndpointUtils {
 
     /**
      * Translate provision connector list to provision connector DTO list list
+     *
      * @param provisioningConnectorConfigDTOs provision connector list that needs to be translated to provision
      *                                        connector DTO list
      * @return provisioningConnectorConfigs list
      */
     private static List<ProvisioningConnectorConfig> createProvisioningConnectorConfigs
-            (List<ProvisioningConnectorConfigDTO> provisioningConnectorConfigDTOs) {
+    (List<ProvisioningConnectorConfigDTO> provisioningConnectorConfigDTOs) {
 
         List<ProvisioningConnectorConfig> provisioningConnectorConfigs = new ArrayList<>();
         if (provisioningConnectorConfigDTOs != null) {
@@ -224,12 +231,13 @@ public class EndpointUtils {
 
     /**
      * Translate provision connector DTO list to provision connector list
+     *
      * @param provisioningConnectorConfigs provision connector DTO list that needs to be translated to provision
-     *                                        connector list
+     *                                     connector list
      * @return provisioningConnectorConfigDTOs list
      */
     public static List<ProvisioningConnectorConfigDTO> createProvisioningConnectorConfigDTOs
-            (List<ProvisioningConnectorConfig> provisioningConnectorConfigs) {
+    (List<ProvisioningConnectorConfig> provisioningConnectorConfigs) {
 
         List<ProvisioningConnectorConfigDTO> provisioningConnectorConfigDTOs = new ArrayList<>();
         if (provisioningConnectorConfigs != null) {
@@ -241,6 +249,7 @@ public class EndpointUtils {
 
     /**
      * Translate role configuration DTO to role config
+     *
      * @param permissionsAndRoleConfigDTO role config DTO that needs to be translated to role config
      * @return permissionsAndRoleConfig
      */
@@ -278,6 +287,7 @@ public class EndpointUtils {
 
     /**
      * Translate role configuration to role config DTO
+     *
      * @param permissionsAndRoleConfig role config that needs to be translated to role config DTO
      * @return permissionsAndRoleConfigDTO
      */
@@ -320,12 +330,13 @@ public class EndpointUtils {
 
     /**
      * Translate JIT provisioning config DTO to JIT provisioning config
+     *
      * @param justInTimeProvisioningConfigDTO JIT provisioning config DTO that needs to be translated to JIT
      *                                        provisioning config
      * @return justInTimeProvisioningConfig object
      */
     public static JustInTimeProvisioningConfig createJustinTimeProvisioningConfig
-            (JustInTimeProvisioningConfigDTO justInTimeProvisioningConfigDTO) {
+    (JustInTimeProvisioningConfigDTO justInTimeProvisioningConfigDTO) {
 
         JustInTimeProvisioningConfig justInTimeProvisioningConfig = null;
         if (justInTimeProvisioningConfigDTO != null) {
@@ -342,12 +353,13 @@ public class EndpointUtils {
 
     /**
      * Translate JIT provisioning config to JIT provisioning config  DTO
+     *
      * @param justInTimeProvisioningConfig JIT provisioning config that needs to be translated to JIT
-     *                                        provisioning config DTO
+     *                                     provisioning config DTO
      * @return justInTimeProvisioningConfigDTO object
      */
     public static JustInTimeProvisioningConfigDTO createJustinTimeProvisioningConfigDTO
-            (JustInTimeProvisioningConfig justInTimeProvisioningConfig) {
+    (JustInTimeProvisioningConfig justInTimeProvisioningConfig) {
 
         JustInTimeProvisioningConfigDTO justInTimeProvisioningConfigDTO = null;
         if (justInTimeProvisioningConfig != null) {
@@ -408,12 +420,13 @@ public class EndpointUtils {
 
     /**
      * Translate federated authenticator config to federated authenticator config DTO list
+     *
      * @param federatedAuthenticatorConfigs federated authenticator config list that needs to be translated to
      *                                      federated authenticator config DTO list
      * @return federatedAuthenticatorConfigDTOs list
      */
     public static List<FederatedAuthenticatorConfigDTO> createFederatorAuthenticatorDTOList
-            (List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs) {
+    (List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigs) {
 
         List<FederatedAuthenticatorConfigDTO> federatedAuthenticatorConfigDTOs = new ArrayList<>();
         if (federatedAuthenticatorConfigs != null) {
@@ -426,8 +439,9 @@ public class EndpointUtils {
 
     /**
      * Translate provision Connector Configuration DTO to provision Connector Configuration
+     *
      * @param provisioningConnectorConfigDTO provision Connector Configuration DTO that needs to be translated to
-     *                                      provision Connector Configuration
+     *                                       provision Connector Configuration
      * @return provisioningConnectorConfig
      */
     public static ProvisioningConnectorConfig createProvisioningConnectorConfig(ProvisioningConnectorConfigDTO
@@ -467,8 +481,9 @@ public class EndpointUtils {
 
     /**
      * Translate Claim Configuration DTO to Claim Configuration
+     *
      * @param claimConfigDTO Claim Configuration DTO that needs to be translated to
-     *                                      Claim Configuration
+     *                       Claim Configuration
      * @return claimConfig
      */
     public static ClaimConfig createClaimConfig(ClaimConfigDTO claimConfigDTO) {
@@ -509,6 +524,7 @@ public class EndpointUtils {
     }
 
     private static Claim createClaim(ClaimDTO claimDTO) {
+
         Claim claim = null;
         if (claimDTO != null) {
             claim = new Claim();
@@ -528,8 +544,10 @@ public class EndpointUtils {
         }
         return claimDTO;
     }
+
     /**
      * Translate Claim Configuration to Claim Configuration DTO
+     *
      * @param claimConfig Claim Configuration  that needs to be translated to Claim Configuration DTO
      * @return claimConfigDTO
      */
@@ -576,8 +594,9 @@ public class EndpointUtils {
 
     /**
      * Translate Federated authenticator configuration DTO to federated authenticator configuration
-     * @param federatedAuthenticatorConfigDTO  federated authenticator DTO that needs to be translated to federated
-     *                                         authenticator
+     *
+     * @param federatedAuthenticatorConfigDTO federated authenticator DTO that needs to be translated to federated
+     *                                        authenticator
      * @return federatedAuthenticatorConfig
      */
     public static FederatedAuthenticatorConfig createDefaultAuthenticator(FederatedAuthenticatorConfigDTO
@@ -664,8 +683,9 @@ public class EndpointUtils {
 
     /**
      * Handles InternalServerErrorExceptions
+     *
      * @param errorCode error code
-     * @param log   log object
+     * @param log       log object
      * @param exception exception that needs to be passed
      * @return InternalServerErrorException object
      */
@@ -682,9 +702,10 @@ public class EndpointUtils {
 
     /**
      * Handles BadRequestException
+     *
      * @param description error code
-     * @param log   log object
-     * @param code error code
+     * @param log         log object
+     * @param code        error code
      * @return BadRequestException object
      */
     public static BadRequestException buildBadRequestException(String description, String code,

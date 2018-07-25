@@ -19,6 +19,7 @@
 package org.wso2.carbon.identity.api.idpmgt;
 
 import javafx.util.Pair;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,8 +46,13 @@ public class IDPMgtBridgeService {
 
     private IdentityProviderManager identityProviderManager = IdentityProviderManager.getInstance();
 
+    private IdPConfigParser idPConfigParser;
+
+    private static final int DEFAULT_SEARCH_LIMIT = 100;
+
     private IDPMgtBridgeService() {
 
+        idPConfigParser = new IdPConfigParser();
     }
 
     /**
@@ -125,12 +131,13 @@ public class IDPMgtBridgeService {
 
     /**
      * Function returns the set of authenticators for a given IDP
-     * @param idpID id of the idp
-     * @param limit limit of the query
+     *
+     * @param idpID  id of the idp
+     * @param limit  limit of the query
      * @param offset starting index of the query
      * @return list of authenticators which satisfy the query parameters
      * @throws IdentityProviderManagementException throws
-     * @throws IDPMgtBridgeServiceException throws
+     * @throws IDPMgtBridgeServiceException        throws
      */
     public List<FederatedAuthenticatorConfig> getAuthenticatorList(String idpID, Integer limit, Integer offset) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -140,16 +147,18 @@ public class IDPMgtBridgeService {
                 .getFederatedAuthenticatorConfigs());
 
         Pair<Integer, Integer> indexValue = paginationList(federatedAuthenticatorConfigs.size(), limit, offset);
-        return federatedAuthenticatorConfigs.subList(indexValue.getKey(), indexValue.getValue());    }
+        return federatedAuthenticatorConfigs.subList(indexValue.getKey(), indexValue.getValue());
+    }
 
     /**
      * Function returns the set of provision connectors for a given IDP
-     * @param idpID id of the idp
-     * @param limit limit of the query
+     *
+     * @param idpID  id of the idp
+     * @param limit  limit of the query
      * @param offset starting index of the query
      * @return list of authenticators which satisfy the query parameters
      * @throws IdentityProviderManagementException throws
-     * @throws IDPMgtBridgeServiceException throws
+     * @throws IDPMgtBridgeServiceException        throws
      */
     public List<ProvisioningConnectorConfig> getOutboundConnectorList(String idpID, Integer limit, Integer offset)
             throws
@@ -179,11 +188,22 @@ public class IDPMgtBridgeService {
         return identityProviders.subList(indexValue.getKey(), indexValue.getValue());
     }
 
+    private int getDefaultLimitFromConfig() {
+
+        int limit = DEFAULT_SEARCH_LIMIT;
+
+        if (idPConfigParser.getConfiguration().get(Constants.IDP_SEARCH_LIMIT_PATH) != null) {
+            limit = Integer.parseInt(idPConfigParser.getConfiguration()
+                    .get(Constants.IDP_SEARCH_LIMIT_PATH).toString());
+        }
+        return limit;
+    }
+
     private Pair<Integer, Integer> paginationList(Integer listSize, Integer limit, Integer offset) throws
             IDPMgtBridgeServiceException {
 
         if (limit == null) {
-            limit = 100;
+            limit = getDefaultLimitFromConfig();
         }
 
         if (offset == null) {
@@ -195,8 +215,7 @@ public class IDPMgtBridgeService {
         int endIndex;
         if (listSize <= (limit + offset)) {
             endIndex = listSize;
-        }
-        else {
+        } else {
             endIndex = (limit + offset);
         }
         if (listSize < offset) {
@@ -205,6 +224,7 @@ public class IDPMgtBridgeService {
         }
         return new Pair<>(offset, endIndex);
     }
+
     /**
      * Updates an existing IDP.
      *
@@ -238,15 +258,15 @@ public class IDPMgtBridgeService {
     }
 
     /**
-     *
      * @param federatedAuthenticatorConfig federated authenticator that needs to be added
-     * @param id id of the IDP
+     * @param id                           id of the IDP
      * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
-     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
+     * @throws IDPMgtBridgeServiceException        throws an IDPMgtBridgeServiceException exception
      */
     public void updateAuthenticator(FederatedAuthenticatorConfig federatedAuthenticatorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
+        validateFederatedAuthenticatorConfig(federatedAuthenticatorConfig);
         IdentityProvider idp = getIDPById(id);
         FederatedAuthenticatorConfig[] federatedAuthenticatorConfigs = idp.getFederatedAuthenticatorConfigs();
         List<FederatedAuthenticatorConfig> federatedAuthenticatorConfigsAsList = Arrays.asList
@@ -262,16 +282,28 @@ public class IDPMgtBridgeService {
         }
     }
 
+    private void validateFederatedAuthenticatorConfig(FederatedAuthenticatorConfig federatedAuthenticatorConfig) throws
+            IDPMgtBridgeServiceException {
+
+        if (federatedAuthenticatorConfig == null) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_TYPE_RECIEVED, null);
+        }
+
+        if (StringUtils.isEmpty(federatedAuthenticatorConfig.getName())) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_FEDERATED_CONFIG, null);
+        }
+    }
+
     /**
-     *
      * @param receivedClaimConfig claim configuration that needs to be added
-     * @param id id of the IDP
+     * @param id                  id of the IDP
      * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
-     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
+     * @throws IDPMgtBridgeServiceException        throws an IDPMgtBridgeServiceException exception
      */
     public void updateClaimConfiguration(ClaimConfig receivedClaimConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
+        validateClaimConfig(receivedClaimConfig);
         IdentityProvider idp = getIDPById(id);
         idp.setClaimConfig(receivedClaimConfig);
         updateIDP(idp, id);
@@ -282,16 +314,23 @@ public class IDPMgtBridgeService {
         }
     }
 
+    private void validateClaimConfig(ClaimConfig receivedClaimConfig) throws IDPMgtBridgeServiceException {
+
+        if (receivedClaimConfig == null) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_TYPE_RECIEVED, null);
+        }
+    }
+
     /**
-     *
      * @param permissionsAndRoleConfig role configuration that needs to be added
-     * @param id id of the IDP
+     * @param id                       id of the IDP
      * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
-     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
+     * @throws IDPMgtBridgeServiceException        throws an IDPMgtBridgeServiceException exception
      */
     public void updateRoles(PermissionsAndRoleConfig permissionsAndRoleConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
+        validateRoles(permissionsAndRoleConfig);
         IdentityProvider idp = getIDPById(id);
         idp.setPermissionAndRoleConfig(permissionsAndRoleConfig);
         updateIDP(idp, id);
@@ -301,12 +340,23 @@ public class IDPMgtBridgeService {
         }
     }
 
+    private void validateRoles(PermissionsAndRoleConfig permissionsAndRoleConfig) throws IDPMgtBridgeServiceException {
+
+        if (permissionsAndRoleConfig == null) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_TYPE_RECIEVED, null);
+        }
+
+        if (ArrayUtils.isEmpty(permissionsAndRoleConfig.getIdpRoles()) || ArrayUtils.isEmpty(permissionsAndRoleConfig
+                .getRoleMappings())) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_ROLE_CONFIG, null);
+        }
+    }
+
     /**
-     *
      * @param justInTimeProvisioningConfig JIT provisioning configuration that needs to be added
-     * @param id id of the IDP
+     * @param id                           id of the IDP
      * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
-     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
+     * @throws IDPMgtBridgeServiceException        throws an IDPMgtBridgeServiceException exception
      */
     public void updateJITProvisioningConfig(JustInTimeProvisioningConfig justInTimeProvisioningConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
@@ -322,17 +372,16 @@ public class IDPMgtBridgeService {
     }
 
     /**
-     *
      * @param provisioningConnectorConfig provisioning connector configuration that needs to be added
-     * @param id id of the IDP
+     * @param id                          id of the IDP
      * @throws IdentityProviderManagementException throws an IdentityProviderManagementException exception
-     * @throws IDPMgtBridgeServiceException throws an IDPMgtBridgeServiceException exception
+     * @throws IDPMgtBridgeServiceException        throws an IDPMgtBridgeServiceException exception
      */
     public void updateProvisioningConnectorConfig(ProvisioningConnectorConfig provisioningConnectorConfig, String id) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
 
+        validateProvisioningConf(provisioningConnectorConfig);
         IdentityProvider idp = getIDPById(id);
-
         ProvisioningConnectorConfig[] provisioningConnectorConfigs = idp.getProvisioningConnectorConfigs();
         List<ProvisioningConnectorConfig> provisioningConnectorConfigsList = Arrays.asList
                 (provisioningConnectorConfigs);
@@ -347,6 +396,19 @@ public class IDPMgtBridgeService {
                     provisioningConnectorConfig.getName(), idp.getIdentityProviderName()));
         }
     }
+
+    private void validateProvisioningConf(ProvisioningConnectorConfig provisioningConnectorConfig) throws
+            IDPMgtBridgeServiceException {
+
+        if (provisioningConnectorConfig == null) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_TYPE_RECIEVED, null);
+        }
+
+        if (StringUtils.isEmpty(provisioningConnectorConfig.getName())) {
+            throw Utils.handleException(Constants.ErrorMessages.ERROR_CODE_INVALID_PROVISIONING_CONFIG, null);
+        }
+    }
+
     private void validateDuplicateIDPs(IdentityProvider identityProvider, String tenantDomain, String decodedIDPId,
                                        IdentityProvider oldIDP) throws
             IdentityProviderManagementException, IDPMgtBridgeServiceException {
